@@ -1,5 +1,5 @@
 <template>
-  <yd-layout :top="top">
+  <yd-layout>
     <chatItem v-for="(item, index) in chatItems" :key="index"   @resend="resend" :length="chatItems.length" :index="index" :item="item"></chatItem>
     <chatInput  slot="tabbar" @beforeSend="beforeSend"/>
   </yd-layout>
@@ -14,9 +14,6 @@ export default {
   },
   data: function() {
     return {
-      top: 0,
-      chatStatue: "open",
-      chatStatusContent: "",
       chatItems: [
         {
           showTime: true,

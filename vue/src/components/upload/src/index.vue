@@ -34,12 +34,10 @@
 </template>
 
 <script>
-
-require('../lrzall')
-import Upload from './upload'
-import user from '@/libs/user'
-import Progress from 'vue-multiple-progress'
-  export default {
+require("../lrzall");
+import Upload from "./upload";
+import Progress from "vue-multiple-progress";
+export default {
   components: {
     Upload,
     Progress
@@ -48,32 +46,32 @@ import Progress from 'vue-multiple-progress'
     lineItems: {
       type: [String, Number],
       default: 4,
-      validator: function(val) {  
-          return val > 0;  
-      } 
+      validator: function(val) {
+        return val > 0;
+      }
     },
     lrz: {
-        type: Boolean,
-        default: false
+      type: Boolean,
+      default: false
     },
     lrzOption: {
       type: Object,
-      default: function () {
-        return {quality: 0.9}
+      default: function() {
+        return { quality: 0.9 };
       }
     },
     accept: {
       type: String,
-      default: ''
+      default: ""
     },
     capture: {
       type: String,
-      default: ''
+      default: ""
     },
     format: {
       type: [Array],
       default: function() {
-        return ['jpg', 'jpeg', 'png']
+        return ["jpg", "jpeg", "png"];
       }
     },
     showList: {
@@ -104,27 +102,27 @@ import Progress from 'vue-multiple-progress'
       type: [Array, String],
       default: function() {
         if (this.multiple) {
-          return []
+          return [];
         } else {
-          return ''
+          return "";
         }
       }
     },
     action: {
       type: String,
-      default: ''
+      default: ""
     },
     imgHost: {
       type: String,
-      default: ''
+      default: ""
     },
     preview: {
-        type: Function,
-        default: null
+      type: Function,
+      default: null
     },
     // 多个上传组件一起使用的时候做区分
     uniqueId: {
-      type: [ Number, String ],
+      type: [Number, String],
       default: 0
     }
   },
@@ -132,85 +130,92 @@ import Progress from 'vue-multiple-progress'
     return {
       emit: false,
       uploadData: {
-        token: user.getToken()
+        token: sessionStorage.getItem("token")
       },
       uploadList: [],
       uidList: [],
       itemWidth: 0,
       emitValue: []
-    }
+    };
   },
   methods: {
-    getMutiple ()
-    {
-      if (this.multiple && (this.accept != '' || this.capture != '')) {
-        return false
+    getMutiple() {
+      if (this.multiple && (this.accept != "" || this.capture != "")) {
+        return false;
       }
 
-      return this.multiple
+      return this.multiple;
     },
-    beforeUpload (file) {
+    beforeUpload(file) {
       if (!this.handleBeforeUpload()) {
-        return false
+        return false;
       }
-      this.emit = false
+      this.emit = false;
 
       if (!this.multiple) {
-        this.uidList = []
-        this.uploadList = []
+        this.uidList = [];
+        this.uploadList = [];
       }
-      this.uidList.push(file.uid)
+      this.uidList.push(file.uid);
       // 图片名字暂时保留
       this.uploadList.push({
         name: file.name,
-        url: '',
+        url: "",
         percentage: 0
-      })
-      this.emitValue.push('')
+      });
+      this.emitValue.push("");
       if (this.lrz) {
-          return lrz(file, this.lrzOption)
+        return lrz(file, this.lrzOption);
       }
-      return true
+      return true;
     },
-    onProgress (e, file, list) {
-      this.uploadList[this.uidList.indexOf(file.uid)].percentage = e.percent
+    onProgress(e, file, list) {
+      this.uploadList[this.uidList.indexOf(file.uid)].percentage = e.percent;
     },
-    onError (err, response, file) {
-      this.delete(this.uidList.indexOf(file.uid))
+    onError(err, response, file) {
+      this.delete(this.uidList.indexOf(file.uid));
     },
     handleClick(index) {
       if (!this.uploadList[index].url) {
-        return false
+        return false;
       }
       if (this.preview) {
-        this.preview(index, this.uniqueId)
-        return false
+        this.preview(index, this.uniqueId);
+        return false;
       }
-      
-      this.delete(index)
-      this.emit = true
+
+      this.delete(index);
+      this.emit = true;
     },
     handleSuccess(res, file) {
       if (res.data.url) {
-        delete this.uploadList[this.uidList.indexOf(file.uid)].percentage
-        this.$set(this.uploadList[this.uidList.indexOf(file.uid)], 'url' , res.data.url)
-        this.$set(this.emitValue, this.uidList.indexOf(file.uid) , res.data.url)
-        this.emit = true
+        delete this.uploadList[this.uidList.indexOf(file.uid)].percentage;
+        this.$set(
+          this.uploadList[this.uidList.indexOf(file.uid)],
+          "url",
+          res.data.url
+        );
+        this.$set(this.emitValue, this.uidList.indexOf(file.uid), res.data.url);
+        this.emit = true;
       } else {
-        this.notify('文件上传失败')
-        this.delete(this.uidList.indexOf(file.uid))
+        this.notify("文件上传失败" + res.msg);
+        this.delete(this.uidList.indexOf(file.uid));
       }
     },
     handleFormatError(file) {
-      this.notify(file.name + '文件的格式不正确，请选择' + this.format)
+      this.notify(file.name + "文件的格式不正确，请选择" + this.format);
     },
     handleMaxSize(file) {
-      this.delete(this.uidList.indexOf(file.uid))
-      this.notify('文件' + file.name + ' 太大, 不能超过 ' + this.fileSize / 1024 + 'M.')
+      this.delete(this.uidList.indexOf(file.uid));
+      this.notify(
+        "文件" + file.name + " 太大, 不能超过 " + this.fileSize / 1024 + "M."
+      );
     },
     handleMinSize(file) {
-      this.delete(this.uidList.indexOf(file.uid))
-      this.notify('文件' + file.name + ' 太小, 不能小于 ' + this.fileSize / 1024 + 'M.')
+      this.delete(this.uidList.indexOf(file.uid));
+      this.notify(
+        "文件" + file.name + " 太小, 不能小于 " + this.fileSize / 1024 + "M."
+      );
     },
     handleBeforeUpload() {
       if (!this.multiple) {
@@ -218,38 +223,38 @@ import Progress from 'vue-multiple-progress'
       }
       const check = this.uploadList.length < this.listLength;
       if (!check) {
-        this.notify('超过上传允许的最大数量.')
+        this.notify("超过上传允许的最大数量.");
       }
       return check;
     },
-    notify (msg) {
+    notify(msg) {
       if (this.$store) {
-        this.$store.commit('msg', msg)
+        this.$store.commit("msg", msg);
       }
     },
-    delete (index) {
+    delete(index) {
       this.$delete(this.emitValue, index);
       this.$delete(this.uploadList, index);
       this.$delete(this.uidList, index);
     },
-    init (val) {
-      this.uploadList = []
-      this.emitValue = []
-      this.uidList = []
-      if (typeof val  == 'string') {
+    init(val) {
+      this.uploadList = [];
+      this.emitValue = [];
+      this.uidList = [];
+      if (typeof val == "string") {
         // 防止空数据
         if (val) {
-          this.uploadList = JSON.parse(JSON.stringify([{url: val}]))
-          this.emitValue = [val]
-          this.uidList = [1]
+          this.uploadList = JSON.parse(JSON.stringify([{ url: val }]));
+          this.emitValue = [val];
+          this.uidList = [1];
         }
       } else {
         val.forEach((item, key) => {
           this.uploadList.push({
             url: item
-          })
-          this.emitValue.push(item)
-          this.uidList.push(key)
+          });
+          this.emitValue.push(item);
+          this.uidList.push(key);
         });
       }
     }
@@ -257,20 +262,22 @@ import Progress from 'vue-multiple-progress'
   watch: {
     emit: function(val) {
       if (val) {
-        this.$emit('input', this.multiple ? this.emitValue : this.emitValue[0])
-        this.emit = false
+        this.$emit("input", this.multiple ? this.emitValue : this.emitValue[0]);
+        this.emit = false;
       }
     },
-    value (val) {
-      this.init(val)
+    value(val) {
+      this.init(val);
     }
   },
   mounted() {
-    this.init(this.value)
-    let width = document.getElementById('upload-box').clientWidth - (this.lineItems - 1) * 4
-    this.itemWidth = width/this.lineItems
+    this.init(this.value);
+    let width =
+      document.getElementById("upload-box").clientWidth -
+      (this.lineItems - 1) * 4;
+    this.itemWidth = width / this.lineItems;
   }
-}
+};
 </script>
 
 <style scoped>
@@ -279,15 +286,16 @@ import Progress from 'vue-multiple-progress'
   height: 58px;
   border: 1px dashed #dddee1;
   border-radius: 4px;
-  line-height: 58px;text-align:center;
+  line-height: 58px;
+  text-align: center;
 }
-.upload-components-button{
-float: left;
+.upload-components-button {
+  float: left;
   overflow: hidden;
 }
 
 .upload-list-item {
-float: left;
+  float: left;
   width: 60px;
   height: 60px;
   text-align: center;
@@ -296,7 +304,7 @@ float: left;
   overflow: hidden;
   background: #fff;
   position: relative;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, .2);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
   margin-right: 4px;
   margin-bottom: 2px;
 }
@@ -314,7 +322,7 @@ float: left;
   bottom: 0;
   left: 0;
   right: 0;
-  background: rgba(0, 0, 0, .6);
+  background: rgba(0, 0, 0, 0.6);
 }
 .upload-list-item-cover i {
   color: #fff;

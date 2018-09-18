@@ -1,5 +1,6 @@
 <template>
     <div class="input-flex-column">
+          <form @submit.prevent="SendText" action=".">
         <div class="input-text-voice-super">
             <input v-if="inputObj.inputStatus==='text'"
                    class="chat-input-style" style="margin-left:8px;"
@@ -8,6 +9,7 @@
               <img @click="chatInputSendExtra" class="extra-btn-style" src="../../../assets/images/chat/extra.png"/>
             </div>
         </div>
+          </form>
         <div v-if="chatInputShowExtra">
             <div class="list-divide-line" />
             <extra @extra-click="extraClick" :extras="chatInputExtraArr"></extra>
@@ -44,11 +46,11 @@ export default {
       this.chatInputShowExtra = !this.chatInputShowExtra;
     },
     SendText(e) {
-      this.textMessage = "";
       this.$emit("beforeSend", {
         type: "text",
-        content: e.detail.value
+        content: this.textMessage
       });
+      this.textMessage = "";
     },
     async extraClick(type) {
       if (type == "image") {
