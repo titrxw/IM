@@ -15,13 +15,13 @@ if (Vue.ENV_PRODUCATION) {
 }
 
 
-// 图片懒加载
-import VueLazyload from 'vue-lazyload'
-Vue.use(VueLazyload, {
-    error: require('../assets/images/error.png'),
-    loading: require('../assets/images/load.gif'),
-    attempt: 3
-})
+// // 图片懒加载
+// import VueLazyload from 'vue-lazyload'
+// Vue.use(VueLazyload, {
+//     error: require('../assets/images/error.png'),
+//     loading: require('../assets/images/load.gif'),
+//     attempt: 3
+// })
 
 
 // 输入框和键盘问题

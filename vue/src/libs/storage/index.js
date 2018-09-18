@@ -9,7 +9,7 @@ class Storage {
   static default
   static session
   static local
-  static prefx = ''
+  static prefx
 
   constructor(prefx = '') {
     this.prefx = prefx

@@ -1,7 +1,11 @@
-import store from '@/store'
 import storage from '@/libs/storage'
 export default class User {
-    static token = null
+    static token
+
+    constructor () {
+        this.token = null
+    }
+
     static login(result) {
         this.token = result.token
         storage.session.set('token', result.token)

@@ -1,9 +1,17 @@
 export default class MyWebSocket {
-    _onError = null;
-    _onClose = null;
-    _onConnect = null;
-    _onMessage = null;
-    _handle = null;
+    _onError
+    _onClose
+    _onConnect
+    _onMessage
+    _handle
+    
+    constructor () {
+        this._onError = null;
+        this._onClose = null;
+        this._onConnect = null;
+        this._onMessage = null;
+        this._handle = null;
+    }
 
     setOnConnect(callback) {
         if (typeof callback != 'function') return false; 

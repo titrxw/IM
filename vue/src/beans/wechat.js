@@ -1,6 +1,10 @@
 import storage from '@/libs/storage'
 export default class Wechat {
-    static openId = null
+    static openId
+
+    constructor () {
+        this.openId = null
+    }
     static wechatAuthSuccess(openId) {
         this.openId = openId
         storage.session.set('openId', openId)

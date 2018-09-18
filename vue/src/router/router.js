@@ -42,5 +42,16 @@ export default [{
         component: function(resolve) {
             require(['../page/system/login'], resolve)
         }
-    }
+    },
+    {
+        path: '/chat/input',
+        meta: {
+            requireLogin: false,
+            showTabBar: false,
+            title: '聊天'
+        },
+        component: function(resolve) {
+            require(['../page/chat/input/chat'], resolve)
+        }
+    },
 ]
