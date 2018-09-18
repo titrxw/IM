@@ -1,16 +1,24 @@
 export default class MyWebSocket {
     _onError = null;
+    _onClose = null;
     _onConnect = null;
     _onMessage = null;
     _handle = null;
 
     setOnConnect(callback) {
+        if (typeof callback != 'function') return false; 
         this._onConnect = callback;
     }
+    setOnClose(callback) {
+        if (typeof callback != 'function') return false; 
+        this._onClose = callback;
+    }
     setOnError(callback) {
+        if (typeof callback != 'function') return false; 
         this._onError = callback;
     }
     setOnMessage(callback) {
+        if (typeof callback != 'function') return false; 
         this._onMessage = callback;
     }
 
@@ -19,16 +27,22 @@ export default class MyWebSocket {
             return true;
         }
         let that = this
-        this.handle = new WebSocket(host);
-        this.handle.onerror = function(event) {
-            that._onError && that._onError(event);
-        };
+        this._handle = new WebSocket(host);
         //与WebSocket建立连接
-        this.handle.onopen = function(event) {
+        this._handle.onopen = function(event) {
             that._onConnect && that._onConnect(event);
         };
+        //与WebSocket建立连接
+        this._handle.onclose = function(event) {
+            that._handle = null;
+            that._onClose && that._onClose(event);
+        };
+        this._handle.onerror = function(event) {
+            that._handle = null;
+            that._onError && that._onError(event);
+        };
         //处理服务器返回的信息
-        this.handle.onmessage = function(event) {
+        this._handle.onmessage = function(event) {
             that._onMessage && that._onMessage(event);
         };
     }
@@ -36,6 +50,6 @@ export default class MyWebSocket {
         if (typeof data == 'object') {
             data = JSON.stringify(data)
         }
-        this.handle.send(data)
+        this._handle.send(data)
     }
 }
