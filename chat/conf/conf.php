@@ -17,7 +17,8 @@ return array(
         'tokenBucket' => 'framework\\tokenbucket\\Bucket',
         'apireset' => 'blog\\lib\\ApiReset',
         'redis' => 'framework\\components\\cache\\Redis',
-        'uniqueid' => 'framework\\components\\uniqueid\\UniqueId'
+        'uniqueid' => 'framework\\components\\uniqueid\\UniqueId',
+        'wsevent' => 'chat\\conf\\WsEvent'
     ), //该项因为设计上的问题暂时不添加
     'components' => array(
         'redis' => array(

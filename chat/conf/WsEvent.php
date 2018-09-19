@@ -10,9 +10,9 @@ namespace chat\conf;
 
 use framework\base\Container;
 use framework\server\SwooleEvent;
-use framework\task\BaseTask;
+use framework\base\Component;
 
-class ServerWebSocketEvent implements SwooleEvent
+class WsEvent extends Component implements SwooleEvent
 {
     public $_connections = array();
 
