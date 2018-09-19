@@ -24,7 +24,7 @@ class User extends Model
         $salt = $this->password->GetHashSalt();
 
         $user = [
-            'union_id' => 'u_' . $this->helper->uniqueId(),
+            'union_id' => 'u_' . \uniqueId(),
             'name' => $name,
             'mobile' => $mobile,
             'password' => $password,
