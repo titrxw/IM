@@ -7,7 +7,7 @@ import user from '@/beans/user'
  */
 export default class Auth extends base {
     static async register(form) {
-        let result = await this.post('common/bind', form)
+        let result = await this.post('common/register', form)
         if (result) {
             user.login(result)
         }

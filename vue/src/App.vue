@@ -4,11 +4,13 @@
       <router-view class="page-view"></router-view>
     </transition>
     <yd-tabbar slot="tabbar" v-if="$route.meta.showTabBar" activeColor="#a565ff">
-      <yd-tabbar-item title="首页" link="/" :active="$route.path == '/'">
+      <yd-tabbar-item title="消息" link="/msgs" :active="$route.path == '/msgs'">
       </yd-tabbar-item>
-      <yd-tabbar-item title="生活" link="/service" :active="$route.path == '/service'">
+      <yd-tabbar-item title="好友" link="/friends" :active="$route.path == '/friends'">
       </yd-tabbar-item>
-      <yd-tabbar-item title="我的" :link="userLink" :active="$route.path == userLink">
+      <yd-tabbar-item title="发现" link="/friends" :active="$route.path == '/n'">
+      </yd-tabbar-item>
+      <yd-tabbar-item title="我的" link="/friends" :active="$route.path == '/n'">
       </yd-tabbar-item>
     </yd-tabbar>
     <yd-backtop></yd-backtop>
@@ -17,14 +19,6 @@
 <script>
 export default {
   name: "app",
-  computed: {
-    userLink() {
-      if (this.$store.state.userType == 2) {
-        return "/user";
-      }
-      return "/user/ownerIndex";
-    }
-  },
   watch: {
     "$store.state.msg"(val) {
       if (val) {

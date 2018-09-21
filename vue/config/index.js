@@ -30,11 +30,11 @@ module.exports = {
         assetsPublicPath: '/',
         // proxyTable: {},
         proxyTable: {
-            '/kc': { //使用"/api"来代替"http://f.apiplus.c" 
-                target: 'http://www.baidu.com', //源地址 
+            '/chat': { //使用"/api"来代替"http://f.apiplus.c" 
+                target: 'http://127.0.0.1:8081', //源地址 
                 changeOrigin: true, //改变源 
                 pathRewrite: {
-                    '^/kc': '/kc/' //路径重写 
+                    '^/chat': '/chat/' //路径重写 
                 }
             }
         },
