@@ -27,17 +27,21 @@ class Conversation extends User
     {
         $uid = $this->request->get('uid');
         $text = $this->request->get('text');
-
-        $result = $this->_covM->save($this->_uid, $uid, $text);
-        if (!$result) {
-          return [501, '发送失败'];
+        if ($uid == $this->_uid) {
+            return [501, '发送失败'];
         }
+
+        // $result = $this->_covM->save($this->_uid, $uid, $text);
+        // if (!$result) {
+        //   return [501, '发送失败'];
+        // }
 
         $fd = $this->getFdByUid($uid);
         if ($fd) {
           $this->send($fd, [
               'cmd' => 'msg',
               'type' => 'text',
+              'from' => $this->getUser($this->_uid),
               'content' => $text
           ]);
         }

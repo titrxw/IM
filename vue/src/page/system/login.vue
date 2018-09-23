@@ -47,17 +47,11 @@ export default {
       let result = await api.login(this.form);
       if (result) {
         let that = this
-        this.websocket.setOnMessage(function (event) {
-          console.log(event)
-        });
-        this.websocket.setOnConnect(function (event) {
-          that.websocket.send({
-            'controller': 'common',
-            'action': 'userBindFd',
-            'data': {
-              'uid': result
-            }
-          });
+        this.websocket.setOnMessage(function (data, action) {
+          if (action == 'COMMON_USERBINDFD') {
+              that.$router.push('/')
+              return true;
+          }
         });
         this.websocket.connect(this.sysConstant.WEBSOCKET_HOST)
       }

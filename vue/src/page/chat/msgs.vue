@@ -38,7 +38,35 @@ export default {
     };
   },
   methods: {
-    select(id, evt) {}
+    select(id, evt) {},
+  },
+  mounted () {
+    let that = this
+    this.websocket.setOnMessage(function (data,action) {
+      if (action == 'COMMON_USERBINDFD') {
+        that.websocket.send({
+          'controller': 'conversation',
+            'action': 'text',
+            'data': {
+              'uid': 'u_228550207745257472',
+              'text': 'dsadsafdsaf'
+            }
+        })
+      }
+    });
+    
+    if (this.websocket._handle) {
+      this.websocket.send({
+        'controller': 'conversation',
+          'action': 'text',
+          'data': {
+            'uid': 'u_228550207745257472',
+            'text': 'dsadsafdsaf'
+          }
+      })
+    } else {
+      this.websocket.connect(this.sysConstant.WEBSOCKET_HOST)
+    }
   }
 };
 </script>

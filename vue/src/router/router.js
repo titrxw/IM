@@ -14,7 +14,7 @@ export default [{
         path: '/',
         meta: {
             requireLogin: true,
-            showTabBar: false,
+            showTabBar: true,
             title: '登录'
         },
         component: function(resolve) {

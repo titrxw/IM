@@ -26,10 +26,15 @@ abstract class User extends Web
         }
 
         $this->_uid = $uid;
-        $this->_user = $this->redis->get('u-' . $this->_uid);
+        $this->_user = $this->getUser($uid);
         if (!$this->_user) {
             return [501, '请重新登陆'];
         }
         return true;
+    }
+
+    protected function getUser($uid)
+    {
+        return $this->redis->get('u-' . $this->_uid);
     }
 }

@@ -20,7 +20,7 @@ class ServerWebSocketEvent implements SwooleEvent
     {
         global $FD_SYSTEM;
         if (!empty($request->get['uid'])) {
-            if (Container::getInstance()->getComponent($FD_SYSTEM[$request->fd], 'redis')->getHandle()->has('u-' . $request->get['uid'])) {
+            if (Container::getInstance()->getComponent($FD_SYSTEM[$request->fd], 'redis')->has('u-' . $request->get['uid'])) {
                 Container::getInstance()->getComponent($FD_SYSTEM[$request->fd], 'redis')->getHandle()->lpush('blog_ws_user_list', $request->fd);
                 return true;
             }
@@ -72,12 +72,14 @@ class ServerWebSocketEvent implements SwooleEvent
     public function onClose(\swoole_server $server, $fd, $reactorId)
     {
         global $FD_SYSTEM;
-        $redis = Container::getInstance()->getComponent($FD_SYSTEM[$fd], 'redis')->getHandle();
+        // http
+        if (empty($FD_SYSTEM[$fd])) return false;
+        $redis = Container::getInstance()->getComponent($FD_SYSTEM[$fd], 'redis');
         $uid = $redis->get('fd:uid-' . $fd);
         if ($uid) {
             $redis->rm('uid:fd-' . $uid);
             $redis->rm('fd:uid-' . $fd);
-            $redis->lrem('blog_ws_user_list', $fd);
+            $redis->getHandle()->lrem('blog_ws_user_list', $fd);
         }
         
         unset($redis);

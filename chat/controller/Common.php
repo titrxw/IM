@@ -27,6 +27,7 @@ class Common extends Web
      */
     public function registerApi()
     {
+        $name = $this->request->post('name');
         $mobile = $this->request->post('mobile');
         $password = $this->request->post('password');
         $surePassword = $this->request->post('sure_password');
@@ -35,7 +36,7 @@ class Common extends Web
             return [500, '确认密码错误'];
         }
 
-        $user = $this->_userM->register($mobile, $password);
+        $user = $this->_userM->register($name, $mobile, $password);
         if ($user) {
             $this->saveUser($user);
             return [200, $user['union_id']];

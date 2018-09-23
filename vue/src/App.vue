@@ -4,7 +4,7 @@
       <router-view class="page-view"></router-view>
     </transition>
     <yd-tabbar slot="tabbar" v-if="$route.meta.showTabBar" activeColor="#a565ff">
-      <yd-tabbar-item title="消息" link="/msgs" :active="$route.path == '/msgs'">
+      <yd-tabbar-item title="消息" link="/" :active="$route.path == '/msgs'">
       </yd-tabbar-item>
       <yd-tabbar-item title="好友" link="/friends" :active="$route.path == '/friends'">
       </yd-tabbar-item>

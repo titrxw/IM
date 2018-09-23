@@ -20,7 +20,7 @@ class WsEvent extends Component implements SwooleEvent
     {
         global $FD_SYSTEM;
         if (!empty($request->get['uid'])) {
-            if (Container::getInstance()->getComponent($FD_SYSTEM[$request->fd], 'redis')->getHandle()->has('u-' . $request->get['uid'])) {
+            if (Container::getInstance()->getComponent($FD_SYSTEM[$request->fd], 'redis')->has('u-' . $request->get['uid'])) {
                 Container::getInstance()->getComponent($FD_SYSTEM[$request->fd], 'redis')->getHandle()->lpush('blog_ws_user_list', $request->fd);
                 return true;
             }
@@ -40,20 +40,7 @@ class WsEvent extends Component implements SwooleEvent
 
     public function onWorkerStart(\swoole_server $server, $workerId)
     {
-        define('USER_ONLINE_REDIS_EXPIRE', 86400 * 7);
-        define('HAS_SEND_ADD_REQUEST', 1);
-
-//            开启数据库将断开的检测   8小时检测
-        Container::getInstance()->getComponent(SYSTEM_APP_NAME, 'server')->getServer()->addTimer(28800000, function ($timer_id, $params) {
-            try{
-                global $ALL_MODULES;
-                foreach($ALL_MODULES as $key => $item) {
-                    Container::getInstance()->getComponent($key, 'meedo')->pdo->getAttribute(\PDO::ATTR_SERVER_INFO);
-                }
-            } catch (\Throwable $e) {
-                $this->handleThrowable($e);
-            }
-        });
+        
     }
 
     public function onWorkStop(\swoole_server $server, $workerId)
@@ -72,12 +59,14 @@ class WsEvent extends Component implements SwooleEvent
     public function onClose(\swoole_server $server, $fd, $reactorId)
     {
         global $FD_SYSTEM;
-        $redis = Container::getInstance()->getComponent($FD_SYSTEM[$fd], 'redis')->getHandle();
+        // http
+        if (empty($FD_SYSTEM[$fd])) return false;
+        $redis = Container::getInstance()->getComponent($FD_SYSTEM[$fd], 'redis');
         $uid = $redis->get('fd:uid-' . $fd);
         if ($uid) {
             $redis->rm('uid:fd-' . $uid);
             $redis->rm('fd:uid-' . $fd);
-            $redis->lrem('blog_ws_user_list', $fd);
+            $redis->getHandle()->lrem('blog_ws_user_list', $fd);
         }
         
         unset($redis);
