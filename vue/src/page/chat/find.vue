@@ -8,28 +8,28 @@
         :autoFixed="false"
         @on-submit="onSubmit"></Search>
     <div class="theme-padding-top">
-      <div v-for="(item, index) in peoples" :key="index"  class="people" @click="select(item.id)">
+      <div v-for="(item, index) in addPeoples" :key="index"  class="people">
         <img :src="item.icon"/>
         <div class="info">
           <span class="name">{{item.name}}</span>
           <span class="account">{{item.account}}</span>
         </div>
         <div class="operate">
-          <yd-button @click.native="addFriend(item.union_id)" type="hollow" v-if="item.status == 0">添加</yd-button>
-          <yd-button type="primary" @click.native="sendMsg(item.union_id)" v-if="item.status == 1">发消息</yd-button>
+          <yd-button @click.native="addFriend(item.union_id)" type="hollow" v-if="!item.is_friend">添加</yd-button>
+          <yd-button type="primary" @click.native="sendMsg(item.union_id)" v-if="item.is_friend">发消息</yd-button>
         </div>
       </div>
     </div>
     <div class="theme-padding-top">
-      <div v-for="(item, index) in requestPeoples" :key="index"  class="people" @click="select(item.id)">
+      <div v-for="(item, index) in requestPeoples" :key="index"  class="people">
         <img :src="item.icon"/>
         <div class="info">
           <span class="name">{{item.name}}</span>
           <span class="account">{{item.account}}</span>
         </div>
         <div class="operate">
-          <yd-button @click.native="sureAddFriend(item.union_id)" type="hollow" v-if="item.status == 0">添加</yd-button>
-          <yd-button type="primary" @click.native="sendMsg(item.union_id)" v-if="item.status == 1">发消息</yd-button>
+          <yd-button @click.native="sureAddFriend(item.union_id)" type="hollow" v-if="!item.is_friend">添加</yd-button>
+          <yd-button type="primary" @click.native="sendMsg(item.union_id)" v-if="item.is_friend">发消息</yd-button>
         </div>
       </div>
     </div>
@@ -43,52 +43,8 @@ export default {
     return {
       searchValue: "",
       searchResults: [],
-      addPeoples: [
-        {
-          union_id: "",
-          icon: "https://avatars1.githubusercontent.com/u/25978241?s=40&v=4",
-          name: "测试1",
-          account: "23210493240",
-          status: 0
-        },
-        {
-          union_id: "",
-          icon: "https://avatars1.githubusercontent.com/u/25978241?s=40&v=4",
-          name: "测试213213",
-          account: "23232210493240",
-          status: 0
-        },
-        {
-          union_id: "",
-          icon: "https://avatars1.githubusercontent.com/u/25978241?s=40&v=4",
-          name: "测试76",
-          account: "2493240",
-          status: 1
-        }
-      ],
-      requestPeoples: [
-        {
-          union_id: "",
-          icon: "https://avatars1.githubusercontent.com/u/25978241?s=40&v=4",
-          name: "测试1",
-          account: "23210493240",
-          status: 0
-        },
-        {
-          union_id: "",
-          icon: "https://avatars1.githubusercontent.com/u/25978241?s=40&v=4",
-          name: "测试213213",
-          account: "23232210493240",
-          status: 0
-        },
-        {
-          union_id: "",
-          icon: "https://avatars1.githubusercontent.com/u/25978241?s=40&v=4",
-          name: "测试76",
-          account: "2493240",
-          status: 1
-        }
-      ]
+      addPeoples: [],
+      requestPeoples: []
     };
   },
   components: {
@@ -119,7 +75,7 @@ export default {
       });
     },
     sendMsg(uid) {
-      this.$router.push("/chat/input/chat?uid=" + uid);
+      this.$router.push("/chat/input?uid=" + uid);
     },
     sureAddFriend(uid) {
       this.websocket.send({
@@ -135,23 +91,37 @@ export default {
     let self = this;
     this.websocket.setOnMessage(function(data, action) {
       if (action == "FRIEND_FINDUSERBYMOBILE_SEND") {
-        data.status = 0;
-        self.peoples.push(data);
+        if (!data) {
+          return false;
+        }
+        self.addPeoples.push(data);
       } else if (action == "FRIEND_ADD_SEND") {
         self.$store.commit("msg", "添加好友请求发送成功");
         // 发送成功
       } else if (action == "FRIEND_ADD_RECV") {
         // 收到添加好友请求
-        data.status = 0;
+        data.is_friend = false;
         self.requestPeoples.push(data);
       } else if (action == "FRIEND_SUREADD_SEND") {
         // data 为 uid
         // 更改 requestPeople 的status
+        self.requestPeoples.forEach((item) => {
+          if (item.union_id == data) {
+            item.is_friend = true
+            return false;
+          }
+        })
         self.$store.commit("msg", "添加好友成功");
       } else if (action == "FRIEND_SUREADD_RECV") {
         // 收到添加好友请求
         // data.uid 为好友的id
         // 更改addPeoples的status
+        self.addPeoples.forEach((item) => {
+          if (item.union_id == data.union_id) {
+            item.is_friend = true
+            return false;
+          }
+        })
       }
     });
     this.websocket.connect(this.sysConstant.WEBSOCKET_HOST);

@@ -33,18 +33,18 @@ class User extends Model
 
     public function add($sendUid, $recvUid)
     {
-        $isSend = $this->db()->get('user_add_log', 'id', ['send_uid' => $sendUid, 'recv_uid' => $recvUid]);
+        $isSend = $this->db()->get('user_add_log', 'id', ['s_id' => $sendUid, 'r_id' => $recvUid]);
         if ($isSend) {
             return HAS_SEND_ADD_REQUEST;
         }
-        $result = $this->db()->insert('user_add_log',['send_uid' => $sendUid, 'recv_uid' => $recvUid, 'status' => 1]);
+        $result = $this->db()->insert('user_add_log',['s_id' => $sendUid, 'r_id' => $recvUid, 'status' => 1]);
         return $result->rowCount() == 1 ? true : false;
     }
 
     public function sureAdd($sendUid, $recvUid)
     {
         $this->db()->action(function() use (&$sendUid, $recvUid) {
-            $result = $this->db()->update('user_add_log', ['status' => 2], ['send_uid' => $recvUid, 'recv_uid' => $sendUid, 'status' => 1]);
+            $result = $this->db()->update('user_add_log', ['status' => 2], ['s_id' => $recvUid, 'r_id' => $sendUid, 'status' => 1]);
             if (!$result->rowCount()) {
                 $sendUid = false;
                 return false;
@@ -66,7 +66,7 @@ class User extends Model
 
     public function addLogs($uid)
     {
-        $result = $this->db()->select('user_add_log', ['[><]user' => ['recv_uid' => 'uid'], ['name', 'mobile', 'recv_uid(uid)']], ['send_uid' => $uid]);
+        $result = $this->db()->select('user_add_log', ['[><]user' => ['r_id' => 'uid'], ['name', 'mobile', 'r_id(uid)']], ['s_id' => $uid]);
         return $result ? $result : [];
     }
 }

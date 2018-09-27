@@ -8,7 +8,7 @@
       </yd-tabbar-item>
       <yd-tabbar-item title="好友" link="/friends" :active="$route.path == '/friends'">
       </yd-tabbar-item>
-      <yd-tabbar-item title="发现" link="/friends" :active="$route.path == '/n'">
+      <yd-tabbar-item title="发现" link="/find" :active="$route.path == '/find'">
       </yd-tabbar-item>
       <yd-tabbar-item title="我的" link="/friends" :active="$route.path == '/n'">
       </yd-tabbar-item>

@@ -4,7 +4,7 @@
           <span v-if="item.showTime" class="chat-list-time-style">{{item.time}}</span>
         </div>
         <div :style="'width: 100%;display: flex;flex-direction:' + (item.isMy?'row-reverse;':'row;') + 'margin-bottom:' + (index===length-1?150:20) + 'px;margin-top: 20px;'">
-          <img style="width: 40px;height: 40px;border-radius: 50%;margin-left: 0px;margin-right: 15px;"
+          <img style="width: 40px;height: 40px;border-radius: 50%;margin-left: 15px;margin-right: 0px;"
                 :src="item.headUrl"/>
           <img v-if="item.type==='text'" class="chat-list-arrow-style"
                 :src="'./../../assets/images/chat/popu_' + (item.isMy ? 'blue':'white') + '.png'"/>

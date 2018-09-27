@@ -14,75 +14,16 @@ export default {
   },
   data: function() {
     return {
-      chatItems: [
-        {
-          showTime: true,
-          time: "2018-7-7",
-          headUrl:
-            "https://ss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=893776491,1251327685&fm=58",
-          isMy: false,
-          content: "sdfdsfgfhdgf3hfgh",
-          type: "text",
-          sendStatus: "success"
-        },
-        {
-          showTime: false,
-          time: "2018-7-7",
-          headUrl:
-            "https://ss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=893776491,1251327685&fm=58",
-          isMy: true,
-          content: "sdfdsfgfh4dgfhfgh",
-          type: "text",
-          sendStatus: "failed"
-        },
-        {
-          showTime: false,
-          time: "2018-7-7",
-          headUrl:
-            "https://ss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=893776491,1251327685&fm=58",
-          isMy: true,
-          content: "sdfdsfgfhdg4f5hfgh",
-          type: "text",
-          sendStatus: "success"
-        },
-        {
-          showTime: true,
-          time: "2018-7-7",
-          headUrl:
-            "https://ss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=893776491,1251327685&fm=58",
-          isMy: false,
-          content: "sdfdsfgfhdgf6hfgh",
-          type: "text",
-          sendStatus: "sending"
-        },
-        {
-          showTime: true,
-          time: "2018-7-7",
-          headUrl:
-            "https://ss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=893776491,1251327685&fm=58",
-          isMy: true,
-          content:
-            "https://ss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=893776491,1251327685&fm=58",
-          type: "image",
-          sendStatus: "failed"
-        },
-        {
-          showTime: true,
-          time: "2018-7-7",
-          headUrl:
-            "https://ss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=893776491,1251327685&fm=58",
-          isMy: false,
-          content:
-            "https://ss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=893776491,1251327685&fm=58",
-          type: "image",
-          sendStatus: "success"
-        }
-      ],
+      unionId: '',
+      chatItems: [],
       pageHeight: 400
     };
   },
   methods: {
     beforeSend(data) {
+      if (!this.websocket._handle) {
+        return false;
+      }
       data.headUrl =
         "https://ss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=893776491,1251327685&fm=58";
       data.isMy = true;
@@ -91,9 +32,32 @@ export default {
         data.content = "https://zh5j.cn/uploads/" + data.content;
       }
       this.chatItems.push(data);
-      console.log(this.chatItems);
+      this.websocket.send({
+        controller: "conversation",
+        action: "text",
+        data: {
+          uid: this.unionId,
+          text: data.content
+        }
+      })
     },
     resend(data) {}
+  },
+  mounted () {
+    this.unionId = this.$route.query.uid
+    let self = this;
+    this.websocket.setOnMessage(function(data, action) {
+      if (action == "CONVERSATION_TEXT_SEND") {
+        
+      } else if (action == "CONVERSATION_TEXT_RECV") {
+        data.headUrl =
+          "https://ss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=893776491,1251327685&fm=58";
+        data.isMy = false;
+        data.sendStatus = "success";
+        self.chatItems.push(data);
+      }
+    });
+    this.websocket.connect(this.sysConstant.WEBSOCKET_HOST);
   }
 };
 </script>
