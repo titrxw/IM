@@ -66,6 +66,17 @@ export default [{
         }
     },
     {
+        path: '/find',
+        meta: {
+            requireLogin: false,
+            showTabBar: true,
+            title: '发现'
+        },
+        component: function(resolve) {
+            require(['../page/chat/find'], resolve)
+        }
+    },
+    {
         path: '/msgs',
         meta: {
             requireLogin: true,

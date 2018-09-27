@@ -57,6 +57,7 @@ export default {
         let that = this
         this.websocket.setOnMessage(function (event) {
           if (action == 'COMMON_USERBINDFD') {
+            that.websocket.setOnMessage(null)
               that.$router.push('/')
               return true;
           }
