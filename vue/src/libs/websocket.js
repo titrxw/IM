@@ -39,6 +39,13 @@ export default class MyWebSocket {
             return true;
         }
         let that = this
+        if (!user.getToken()) {
+            user.unlogin()
+            router.replace({
+                path: '/login'
+            })
+            return false;
+        }
         host = host + '?uid=' + user.getToken()
         this._handle = new WebSocket(host);
         //与WebSocket建立连接
