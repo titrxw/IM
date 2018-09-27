@@ -18,7 +18,7 @@ return array(
         'apireset' => 'blog\\lib\\ApiReset',
         'redis' => 'framework\\components\\cache\\Redis',
         'uniqueid' => 'framework\\components\\uniqueid\\UniqueId',
-        'wsevent' => 'chat\\conf\\WsEvent'
+        // 'wsevent' => 'chat\\conf\\WsEvent'
     ), //该项因为设计上的问题暂时不添加
     'components' => array(
         'redis' => array(
@@ -34,16 +34,6 @@ return array(
         'apireset' => array(
             'key' => '0a4df5rge6t6h8beg32g4',
             'step' => 5
-        ),
-        'redis' => array(
-            'host'         => '127.0.0.1', // redis主机
-            'port'         => 6379, // redis端口
-            'password'     => '', // 密码
-            'select'       => 0, // 操作库
-            'expire'       => 3600, // 有效期(秒)
-            'timeout'      => 0, // 超时时间(秒)
-            'persistent'   => false, // 是否长连接,
-            'prefix' => ''
         ),
         'meedo' => array(
             'database_type' => 'mysql',

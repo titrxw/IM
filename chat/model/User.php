@@ -44,7 +44,7 @@ class User extends Model
 
     public function login($mobile, $password)
     {
-        $userInfo = $this->db()->get('user', ['union_id', 'mobile', 'password','salt', 'name', 'head_pic'], [
+        $userInfo = $this->db()->get('user', ['union_id', 'mobile', 'password','salt', 'name'], [
             'mobile' => $mobile,
         ]);
         if (!$userInfo) {

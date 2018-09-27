@@ -39,7 +39,7 @@ class Common extends Web
         $user = $this->_userM->register($name, $mobile, $password);
         if ($user) {
             $this->saveUser($user);
-            return [200, $user['union_id']];
+            return [200, ['token' => $user['union_id']]];
         }
 
         return [500, '注册失败'];
@@ -60,7 +60,7 @@ class Common extends Web
         if ($user) {
             // $this->setUidByFd($user['union_id']);
             $this->saveUser($user);
-            return [200, $user['union_id']];
+            return [200,  ['token' => $user['union_id']]];
         }
 
         return [501, '登录失败'];

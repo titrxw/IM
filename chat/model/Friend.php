@@ -9,25 +9,25 @@ namespace chat\model;
 
 use framework\base\Model;
 
-class User extends Model
+class Friend extends Model
 {
     public function list($uid)
     {
-        return $this->db()->select('friends', ['[><]user' => ['f_id' => 'uid']], ['name', 'mobile', 'friends.f_id(uid)'], ['s_id' => $uid]);
+        return $this->db()->select('friends', ['[><]user' => ['f_id' => 'union_id']], ['name', 'mobile', 'friends.f_id(uid)'], ['s_id' => $uid]);
     }
 
     public function findUserByMobile($uid, $mobile) 
     {
-        $result = $this->db()->get('friends', ['[><]user' => ['f_id' => 'uid']], ['name', 'mobile', 'friends.f_id(uid)'], ['s_id' => $uid, 'mobile' => $mobile]);
+        $result = $this->db()->get('friends', ['[><]user' => ['f_id' => 'union_id']], ['name', 'mobile', 'friends.f_id(union_id)'], ['s_id' => $uid, 'mobile' => $mobile]);
         if ($result) {
             $result['is_friend'] = true;
             return $result;
         }
-        $result = $this->db()->get('user', ['name', 'mobile', 'uid'], ['mobile' => $mobile]);
+        $result = $this->db()->get('user', ['name', 'mobile', 'union_id'], ['mobile' => $mobile]);
         if ($result) {
             return $result;
         } else {
-            return [];
+            return false;
         }
     }
 
@@ -37,7 +37,7 @@ class User extends Model
         if ($isSend) {
             return HAS_SEND_ADD_REQUEST;
         }
-        $result = $this->db()->insert('user_add_log',['s_id' => $sendUid, 'r_id' => $recvUid, 'status' => 1]);
+        $result = $this->db()->insert('user_add_log',['s_id' => $sendUid, 'r_id' => $recvUid, 'status' => 1, 'timestamp' => time()]);
         return $result->rowCount() == 1 ? true : false;
     }
 
@@ -66,7 +66,7 @@ class User extends Model
 
     public function addLogs($uid)
     {
-        $result = $this->db()->select('user_add_log', ['[><]user' => ['r_id' => 'uid'], ['name', 'mobile', 'r_id(uid)']], ['s_id' => $uid]);
+        $result = $this->db()->select('user_add_log', ['[><]user' => ['r_id' => 'union_id'], ['name', 'mobile', 'r_id(union_id)']], ['s_id' => $uid]);
         return $result ? $result : [];
     }
 }

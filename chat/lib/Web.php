@@ -61,7 +61,8 @@ abstract class Web extends WebSocket
 
     protected function send($fd, $data, $now = false)
     {
-        $data['data'] = $data;
-        $data['action'] = \strtoupper($this->getController()) . '_' . \strtoupper(\rtrim($this->getAction(), 'Api')) . '_RECV';
+        $_data['data'] = $data;
+        $_data['action'] = \strtoupper($this->getController()) . '_' . \strtoupper(\rtrim($this->getAction(), 'Api')) . '_RECV';
+        parent::send($fd, $_data, $now);
     }
 }

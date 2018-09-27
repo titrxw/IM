@@ -14,7 +14,7 @@ class Friend extends User
 
     protected function afterInit()
     {
-        $this->_friendM = $this->model('User');
+        $this->_friendM = $this->model('Friend');
     }
 
     /**
@@ -26,11 +26,11 @@ class Friend extends User
     {
         $mobile = $this->request->get('mobile');
         if ($mobile == $this->_user['mobile']) {
-            return [200, []];
+            return [200, false];
         }
 
 
-        return [200, $this->_friendM->findUserByMobile($mobile)];
+        return [200, $this->_friendM->findUserByMobile($this->_uid, $mobile)];
     }
 
     /**
@@ -56,7 +56,7 @@ class Friend extends User
             $this->send($fd, [
                 'name' => $this->_user['name'],
                 'mobile' => $this->_user['mobile'],
-                'uid' => $this->_uid
+                'union_id' => $this->_uid
             ]);
         }
         
@@ -79,7 +79,7 @@ class Friend extends User
                 $this->send($fd, [
                     'name' => $this->_user['name'],
                     'mobile' => $this->_user['mobile'],
-                    'uid' => $this->_uid
+                    'union_id' => $this->_uid
                 ]);
             }
             return [200, $uid];

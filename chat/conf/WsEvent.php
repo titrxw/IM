@@ -59,8 +59,6 @@ class WsEvent extends Component implements SwooleEvent
     public function onClose(\swoole_server $server, $fd, $reactorId)
     {
         global $FD_SYSTEM;
-        // http
-        if (empty($FD_SYSTEM[$fd])) return false;
         $redis = Container::getInstance()->getComponent($FD_SYSTEM[$fd], 'redis');
         $uid = $redis->get('fd:uid-' . $fd);
         if ($uid) {

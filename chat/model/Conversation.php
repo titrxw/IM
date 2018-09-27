@@ -16,4 +16,4 @@ class Conversation extends Model
         $result = $this->db()->insert('conversation', ['s_id' => $sendUid, 'r_id' => $recvUid, 'content' => $text, 'timestamp' => time()]);
         return $result->rowCount() ? true : false;
     }
-}
+} 
