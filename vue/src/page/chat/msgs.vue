@@ -43,15 +43,10 @@ export default {
   mounted () {
     let that = this
     this.websocket.setOnMessage(function (data,action) {
-      if (action == 'COMMON_USERBINDFD') {
-        that.websocket.send({
-          'controller': 'conversation',
-            'action': 'text',
-            'data': {
-              'uid': 'u_228550207745257472',
-              'text': 'dsadsafdsaf'
-            }
-        })
+      if (action == 'COMMON_USERBINDFD_RECV') {
+        
+      } else if (action == 'COMMON_USERBINDFD_SEND') {
+        
       }
     });
     

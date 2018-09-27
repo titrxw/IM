@@ -119,7 +119,7 @@ export default {
       });
     },
     sendMsg(uid) {
-      this.$router.push("/chat/msg?uid=" + uid);
+      this.$router.push("/chat/input/chat?uid=" + uid);
     },
     sureAddFriend(uid) {
       this.websocket.send({
