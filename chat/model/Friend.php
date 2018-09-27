@@ -11,7 +11,7 @@ use framework\base\Model;
 
 class User extends Model
 {
-    public function friendList($uid)
+    public function list($uid)
     {
         return $this->db()->select('friends', ['[><]user' => ['f_id' => 'uid']], ['name', 'mobile', 'friends.f_id(uid)'], ['s_id' => $uid]);
     }
@@ -31,7 +31,7 @@ class User extends Model
         }
     }
 
-    public function addUser($sendUid, $recvUid)
+    public function add($sendUid, $recvUid)
     {
         $isSend = $this->db()->get('user_add_log', 'id', ['send_uid' => $sendUid, 'recv_uid' => $recvUid]);
         if ($isSend) {
@@ -41,7 +41,7 @@ class User extends Model
         return $result->rowCount() == 1 ? true : false;
     }
 
-    public function sureAddUser($sendUid, $recvUid)
+    public function sureAdd($sendUid, $recvUid)
     {
         $this->db()->action(function() use (&$sendUid, $recvUid) {
             $result = $this->db()->update('user_add_log', ['status' => 2], ['send_uid' => $recvUid, 'recv_uid' => $sendUid, 'status' => 1]);
@@ -64,7 +64,7 @@ class User extends Model
         return $sendUid ? true : false;
     }
 
-    public function addUserLogs($uid)
+    public function addLogs($uid)
     {
         $result = $this->db()->select('user_add_log', ['[><]user' => ['recv_uid' => 'uid'], ['name', 'mobile', 'recv_uid(uid)']], ['send_uid' => $uid]);
         return $result ? $result : [];

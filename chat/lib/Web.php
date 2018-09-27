@@ -53,9 +53,15 @@ abstract class Web extends WebSocket
             $data['ret'] = $data[0] ?? 200;
             $data['data'] = $data[0] == 200 ? $data[1] ?? '' : '';
             $data['msg'] = $data[0] == 200 ? '' : $data[1] ?? '';
-            $data['action'] = \strtoupper($this->getController()) . '_' . \strtoupper(\rtrim($this->getAction(), 'Api'));
+            $data['action'] = \strtoupper($this->getController()) . '_' . \strtoupper(\rtrim($this->getAction(), 'Api')) . '_SEND';
             unset($data[0], $data[1], $data[2]);
         }
         return $data;
+    }
+
+    protected function send($fd, $data, $now = false)
+    {
+        $data['data'] = $data;
+        $data['action'] = \strtoupper($this->getController()) . '_' . \strtoupper(\rtrim($this->getAction(), 'Api')) . '_RECV';
     }
 }

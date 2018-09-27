@@ -14,8 +14,8 @@
           <span class="account">{{item.account}}</span>
         </div>
         <div class="operate">
-          <yd-button type="hollow" v-if="item.status == 0">添加</yd-button>
-          <yd-button type="primary" v-if="item.status == 1">发消息</yd-button>
+          <yd-button @click.native="addFriend(item.union_id)" type="hollow" v-if="item.status == 0">添加</yd-button>
+          <yd-button type="primary" @click.native="sendMsg(item.union_id)" v-if="item.status == 1">发消息</yd-button>
         </div>
       </div>
     </div>
@@ -29,18 +29,21 @@ export default {
       searchValue: '',
       peoples: [
         {
+          union_id: '',
           icon: "https://avatars1.githubusercontent.com/u/25978241?s=40&v=4",
           name: "测试1",
           account: '23210493240',
           status: 0
         },
         {
+          union_id: '',
           icon: "https://avatars1.githubusercontent.com/u/25978241?s=40&v=4",
           name: "测试213213",
           account: '23232210493240',
           status: 0
         },
         {
+          union_id: '',
           icon: "https://avatars1.githubusercontent.com/u/25978241?s=40&v=4",
           name: "测试76",
           account: '2493240',
@@ -58,6 +61,18 @@ export default {
     },
     onSubmit () {
 
+    },
+    addFriend (uid) {
+      this.websocket.send({
+        'controller': 'friend',
+        'action': 'add',
+        'data': {
+            'uid': uid
+        }
+      })
+    },
+    sendMsg (uid) {
+      this.$router.push('/chat/msg?uid=' + uid)
     }
   },
   mounted () {

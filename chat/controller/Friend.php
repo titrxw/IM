@@ -38,12 +38,12 @@ class Friend extends User
      * 
      * @rule uid|get|参数错误 require 
      */
-    public function addUserApi()
+    public function addApi()
     {
         $uid = $this->request->get('uid');
         // 添加请求记录
 
-        $result = $this->_user->addUser($this->_uid, $uid);
+        $result = $this->_friendM->add($this->_uid, $uid);
         if ($result === HAS_SEND_ADD_REQUEST) {
             return [200, true];
         }
@@ -71,11 +71,11 @@ class Friend extends User
      * 
      * @rule uid|get|参数错误 require 
      */
-    public function sureAddUserApi()
+    public function sureAddApi()
     {
         $uid = $this->request->get('uid');
 
-        $result = $this->_user->sureAddUser($this->_uid, $uid);
+        $result = $this->_friendM->sureAdd($this->_uid, $uid);
         if ($result) {
             $fd = $this->getFdByUid($uid);
             if ($fd) {
@@ -96,17 +96,17 @@ class Friend extends User
     /**
      * @method get
      */
-    public function addUserLogApi()
+    public function addLogApi()
     {
-        return [200, $this->_friendM->addUserLogs($this->_uid)];
+        return [200, $this->_friendM->addLogs($this->_uid)];
     }
 
     /**
      * @method get
      */
-    public function friendListApi()
+    public function listApi()
     {
-        return [200, $this->_friendM->friendList($this->_uid)];
+        return [200, $this->_friendM->list($this->_uid)];
     }
 
 
