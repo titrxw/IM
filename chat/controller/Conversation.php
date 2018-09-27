@@ -39,7 +39,6 @@ class Conversation extends User
         $fd = $this->getFdByUid($uid);
         if ($fd) {
           $this->send($fd, [
-              'cmd' => 'msg',
               'type' => 'text',
               'from' => $this->getUser($this->_uid),
               'content' => $text

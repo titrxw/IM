@@ -54,12 +54,9 @@ class Friend extends User
         $fd = $this->getFdByUid($uid);
         if ($fd) {
             $this->send($fd, [
-                'cmd' => 'addUser',
-                'from' => [
-                    'name' => $this->_user['name'],
-                    'mobile' => $this->_user['mobile'],
-                    'uid' => $this->_uid
-                ]
+                'name' => $this->_user['name'],
+                'mobile' => $this->_user['mobile'],
+                'uid' => $this->_uid
             ]);
         }
         
@@ -80,15 +77,12 @@ class Friend extends User
             $fd = $this->getFdByUid($uid);
             if ($fd) {
                 $this->send($fd, [
-                    'cmd' => 'sureAddUser',
-                    'from' => [
-                        'name' => $this->_user['name'],
-                        'mobile' => $this->_user['mobile'],
-                        'uid' => $this->_uid
-                    ]
+                    'name' => $this->_user['name'],
+                    'mobile' => $this->_user['mobile'],
+                    'uid' => $this->_uid
                 ]);
             }
-            return [200, true];
+            return [200, $uid];
         }
         return [501, '添加失败'];
     }
