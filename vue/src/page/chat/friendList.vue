@@ -1,10 +1,13 @@
 <template>
-<div class="friends">
-  <div v-for="(item, index) in contacts" :key="index"  class="user" @click="select(item.union_id)">
-        <img :src="item.icon" class="user_icon"></img>
-        <span class="user_name">{{item.name}}</span>
-  </div>
-</div>
+    <div class="theme-padding-top">
+      <div v-for="(item, index) in contacts" :key="index" @click="select(item.union_id)"  class="friends">
+        <img :src="item.icon"/>
+        <div class="info">
+          <span class="name">{{item.name}}</span>
+          <span class="account">{{item.mobile}}</span>
+        </div>
+      </div>
+    </div>
 </template>
 <script>
 export default {
@@ -20,6 +23,13 @@ export default {
   },
   mounted () {
     let self = this;
+    console.log(self)
+    if (this.websocket._handle) {
+      self.websocket.send({
+        'controller': 'friend',
+        'action': 'list'
+      })
+    }
     this.websocket.setOnConnect(function (data, action) {
       self.websocket.send({
         'controller': 'friend',
@@ -37,31 +47,24 @@ export default {
 </script>
 <style lang="less" scoped>
 .friends {
-  padding-left: 10px;
-  padding-right: 10px;
-  background:#fff;
-  .user {
-    display: -webkit-box;
-    display: -ms-flexbox;
+  height: 70px;
+  display: flex;
+  background: #fff;
+  padding: 10px;
+  border-bottom: 1px solid #f4f4f4;
+  img {
+    width: 50px;
+    height: 50px;
+  }
+  .info {
+    flex: 1;
+    margin-left: 10px;
     display: flex;
-    height: 52px;
-    border-bottom: 1px solid #dad9d6;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    padding: 8px;
-    position: relative;
-    .user_icon {
-      width: 35px;
-      height: 35px;
-      position: absolute;
-      border-radius: 5px;
-    }
-    .user_name {
-      margin-left: 45px;
-      margin-top: 0px;
-      font-size: 16px;
-      line-height: 35px;
-    }
+    flex-direction: column;
+    line-height: 25px;
+  }
+  .operate {
+    padding-top: 10px;
   }
 }
 </style>
