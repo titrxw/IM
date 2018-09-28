@@ -1,5 +1,4 @@
 import base from './base'
-import wechat from '@/beans/wechat'
 import user from '@/beans/user'
 
 /**
