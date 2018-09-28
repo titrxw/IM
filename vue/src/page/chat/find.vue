@@ -89,6 +89,12 @@ export default {
   },
   mounted() {
     let self = this;
+    if (this.websocket._handle) {
+      self.websocket.send({
+        'controller': 'friend',
+        'action': 'addLog'
+      })
+    }
     this.websocket.setOnConnect(function (data, action) {
       self.websocket.send({
         'controller': 'friend',
@@ -98,15 +104,15 @@ export default {
     this.websocket.setOnMessage(function(data, action) {
       if (action == 'FRIEND_ADDLOG_SEND') {
         if (data.add) {
-          data.add.forEach(element => {
-            element.is_friend = element.status == 1 ? false : true
-          });
+          for (let index in data.add) {
+            data.add[index].is_friend = data.add[index].status == 1 ? false : true
+          }
           self.addPeoples = data.add
         }
         if (data.request) {
-          data.request.forEach(element => {
-            element.is_friend = element.status == 1 ? false : true
-          });
+          for (let index in data.request) {
+            data.request[index].is_friend = data.request[index].status == 1 ? false : true
+          }
           self.requestPeoples = data.request
         }
       } else if (action == "FRIEND_FINDUSERBYMOBILE_SEND") {
