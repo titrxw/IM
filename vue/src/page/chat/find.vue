@@ -89,8 +89,27 @@ export default {
   },
   mounted() {
     let self = this;
+    this.websocket.setOnConnect(function (data, action) {
+      self.websocket.send({
+        'controller': 'friend',
+        'action': 'addLog'
+      })
+    })
     this.websocket.setOnMessage(function(data, action) {
-      if (action == "FRIEND_FINDUSERBYMOBILE_SEND") {
+      if (action == 'FRIEND_ADDLOG_SEND') {
+        if (data.add) {
+          data.add.forEach(element => {
+            element.is_friend = element.status == 1 ? false : true
+          });
+          self.addPeoples = data.add
+        }
+        if (data.request) {
+          data.request.forEach(element => {
+            element.is_friend = element.status == 1 ? false : true
+          });
+          self.requestPeoples = data.request
+        }
+      } else if (action == "FRIEND_FINDUSERBYMOBILE_SEND") {
         if (!data) {
           return false;
         }

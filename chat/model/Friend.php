@@ -13,7 +13,7 @@ class Friend extends Model
 {
     public function list($uid)
     {
-        return $this->db()->select('friends', ['[><]user' => ['f_id' => 'union_id']], ['name', 'mobile', 'friends.f_id(uid)'], ['s_id' => $uid]);
+        return $this->db()->select('friends', ['[><]user' => ['f_id' => 'union_id']], ['name', 'mobile', 'friends.f_id(union_id)'], ['s_id' => $uid]);
     }
 
     public function findUserByMobile($uid, $mobile) 
@@ -66,7 +66,8 @@ class Friend extends Model
 
     public function addLogs($uid)
     {
-        $result = $this->db()->select('user_add_log', ['[><]user' => ['r_id' => 'union_id'], ['name', 'mobile', 'r_id(union_id)']], ['s_id' => $uid]);
-        return $result ? $result : [];
+        $result['add'] = $this->db()->select('user_add_log', ['[><]user' => ['r_id' => 'union_id'], ['name', 'mobile', 'r_id(union_id)', 'user_add_log.status']], ['s_id' => $uid]);
+        $result['request'] = $this->db()->select('user_add_log', ['[><]user' => ['r_id' => 'union_id'], ['name', 'mobile', 'r_id(union_id)', 'user_add_log.status']], ['f_id' => $uid]);
+        return $result;
     }
 }

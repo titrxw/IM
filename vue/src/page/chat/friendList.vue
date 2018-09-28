@@ -1,6 +1,6 @@
 <template>
 <div class="friends">
-  <div v-for="(item, index) in contacts" :key="index"  class="user" @click="select(item.id)">
+  <div v-for="(item, index) in contacts" :key="index"  class="user" @click="select(item.union_id)">
         <img :src="item.icon" class="user_icon"></img>
         <span class="user_name">{{item.name}}</span>
   </div>
@@ -10,27 +10,28 @@
 export default {
   data: function() {
     return {
-      contacts: [
-        {
-          icon: "https://avatars1.githubusercontent.com/u/25978241?s=40&v=4",
-          name: "测试"
-        },
-        {
-          icon: "https://avatars1.githubusercontent.com/u/25978241?s=40&v=4",
-          name: "测试1"
-        },
-        {
-          icon: "https://avatars1.githubusercontent.com/u/25978241?s=40&v=4",
-          name: "测试2"
-        }
-      ],
-      total: 0
+      contacts: []
     };
   },
   methods: {
-    select(id, evt) {
-      wepy.navigateTo({ url: "/pages/chat/chat?id=" + id });
+    select(id) {
+      this.$router.push('/chat/input?uid=' + id)
     }
+  },
+  mounted () {
+    let self = this;
+    this.websocket.setOnConnect(function (data, action) {
+      self.websocket.send({
+        'controller': 'friend',
+        'action': 'list'
+      })
+    })
+    this.websocket.setOnMessage(function(data, action) {
+      if (action == 'FRIEND_LIST_SEND') {
+        self.contacts = data
+      }
+    });
+    this.websocket.connect(this.sysConstant.WEBSOCKET_HOST);
   }
 };
 </script>
