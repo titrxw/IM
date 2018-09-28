@@ -125,12 +125,18 @@ export default {
         // data 为 uid
         // 更改 requestPeople 的status
         self.requestPeoples[data].is_friend = true
+        if (self.addPeoples[data]) {
+          self.addPeoples[data].is_friend = true
+        }
         self.$store.commit("msg", "添加好友成功");
       } else if (action == "FRIEND_SUREADD_RECV") {
         // 收到添加好友请求
         // data.uid 为好友的id
         // 更改addPeoples的status
         self.addPeoples[data.union_id].is_friend = true
+        if (self.requestPeoples[data.union_id]) {
+          self.requestPeoples[data.union_id].is_friend = true
+        }
       }
     });
     this.websocket.connect(this.sysConstant.WEBSOCKET_HOST);
