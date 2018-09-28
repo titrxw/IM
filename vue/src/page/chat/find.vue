@@ -113,34 +113,24 @@ export default {
         if (!data) {
           return false;
         }
-        self.addPeoples.push(data);
+        self.addPeoples[data.union_id] = data;
       } else if (action == "FRIEND_ADD_SEND") {
         self.$store.commit("msg", "添加好友请求发送成功");
         // 发送成功
       } else if (action == "FRIEND_ADD_RECV") {
         // 收到添加好友请求
         data.is_friend = false;
-        self.requestPeoples.push(data);
+        self.requestPeoples[data.union_id] = data;
       } else if (action == "FRIEND_SUREADD_SEND") {
         // data 为 uid
         // 更改 requestPeople 的status
-        self.requestPeoples.forEach((item) => {
-          if (item.union_id == data) {
-            item.is_friend = true
-            return false;
-          }
-        })
+        self.requestPeoples[data].is_friend = true
         self.$store.commit("msg", "添加好友成功");
       } else if (action == "FRIEND_SUREADD_RECV") {
         // 收到添加好友请求
         // data.uid 为好友的id
         // 更改addPeoples的status
-        self.addPeoples.forEach((item) => {
-          if (item.union_id == data.union_id) {
-            item.is_friend = true
-            return false;
-          }
-        })
+        self.addPeoples[data.union_id].is_friend = true
       }
     });
     this.websocket.connect(this.sysConstant.WEBSOCKET_HOST);
