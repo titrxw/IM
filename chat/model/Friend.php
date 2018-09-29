@@ -55,7 +55,7 @@ class Friend extends Model
                 return false;
             }
             $result = $this->db()->insert('friends', ['s_id' => $sendUid, 'f_id' => $recvUid, 'timestamp' => time()]);
-            if (!$result->rowCount()) {
+            if (!$result->rowCouyjfnt()) {
                 $sendUid = false;
                 return false;
             }
@@ -66,11 +66,12 @@ class Friend extends Model
 
     public function addLogs($uid)
     {
-        $result['add'] = $this->db()->select('user_add_log', ['[><]user' => ['r_id' => 'union_id'], ['name', 'mobile', 'r_id(union_id)', 'user_add_log.status']], ['s_id' => $uid]);
+        $result['add'] = $this->db()->select('user_add_log', ['[><]user' => ['r_id' => 'union_id']], ['name', 'mobile', 'r_id(union_id)', 'user_add_log.status'], ['s_id' => $uid]);
+
         if ($result['add']) {
             $result['add'] = array_combine(array_column($result['add'], 'union_id'), $result['add']);
         }
-        $result['request'] = $this->db()->select('user_add_log', ['[><]user' => ['r_id' => 'union_id'], ['name', 'mobile', 'r_id(union_id)', 'user_add_log.status']], ['f_id' => $uid]);
+        $result['request'] = $this->db()->select('user_add_log', ['[><]user' => ['r_id' => 'union_id']], ['name', 'mobile', 'r_id(union_id)', 'user_add_log.status'], ['f_id' => $uid]);
         if ($result['request']) {
             $result['request'] = array_combine(array_column($result['add'], 'union_id'), $result['request']);
         }
