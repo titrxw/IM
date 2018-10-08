@@ -1,12 +1,12 @@
 <template>
 <div class="message">
-  <div v-for="(item, index) in list" :key="index" class="item" @click="select(item.id)">
+  <div v-for="(item, index) in list" :key="index" class="item" @click="select(item.union_id)">
       <div class="header">
           <img class="img" :src="item.icon"></img>
       </div>
       <div class="content">
-          <div class="name"><span>{{item.name}}</span> <span style="float:right;font-size:20px;color: #7b7b7b;">{{ item.time }}</span> </div>
-          <div class="lastmsg">{{item.lastmsg}}</div>
+          <div class="name"><span>{{item.name}}</span> <span style="float:right;font-size:13px;color: #7b7b7b;">{{ item.time }}</span> </div>
+          <div class="lastmsg">{{item.content}}</div>
       </div>
   </div>
 </div>
@@ -15,49 +15,32 @@
 export default {
   data: function() {
     return {
-      list: [
-        {
-          time: "12:09",
-          icon: "https://avatars1.githubusercontent.com/u/25978241?s=40&v=4",
-          name: "测试",
-          lastmsg: "cetry换个房间和"
-        },
-        {
-          time: "12:19",
-          icon: "https://avatars1.githubusercontent.com/u/25978241?s=40&v=4",
-          name: "测试",
-          lastmsg: "cetry换个房间和"
-        },
-        {
-          time: "11:09",
-          icon: "https://avatars1.githubusercontent.com/u/25978241?s=40&v=4",
-          name: "测试",
-          lastmsg: "cetry换个房间和"
-        }
-      ]
+      list: []
     };
   },
   methods: {
-    select(id, evt) {},
+    select(id) {
+      this.$router.push('/chat/input?uid=' + id)
+    }
   },
   mounted () {
-    let that = this
+    let self = this
     this.websocket.setOnMessage(function (data,action) {
-      if (action == 'COMMON_USERBINDFD_RECV') {
-        
-      } else if (action == 'COMMON_USERBINDFD_SEND') {
-        
+      if (action == 'CONVERSATION_LIST_SEND') {
+        self.list = data
       }
     });
+    this.websocket.setOnConnect(function (data, action) {
+      self.websocket.send({
+        'controller': 'conversation',
+        'action': 'list'
+      })
+    })
     
     if (this.websocket._handle) {
       this.websocket.send({
         'controller': 'conversation',
-          'action': 'text',
-          'data': {
-            'uid': 'u_228550207745257472',
-            'text': 'dsadsafdsaf'
-          }
+        'action': 'list'
       })
     } else {
       this.websocket.connect(this.sysConstant.WEBSOCKET_HOST)

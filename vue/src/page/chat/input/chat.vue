@@ -45,7 +45,27 @@ export default {
   },
   mounted () {
     this.unionId = this.$route.query.uid
+    if (this.websocket._handle) {
+      this.websocket.send({
+        'controller': 'conversation',
+        'action': 'history',
+        'data': {
+          uid:this.unionId,
+          page : 1
+        }
+      })
+    }
     let self = this;
+    this.websocket.setOnConnect(function (data, action) {
+      self.websocket.send({
+        'controller': 'conversation',
+        'action': 'history',
+        'data': {
+          uid:self.unionId,
+          page : 1
+        }
+      })
+    })
     this.websocket.setOnMessage(function(data, action) {
       if (action == "CONVERSATION_TEXT_SEND") {
         
@@ -55,6 +75,8 @@ export default {
         data.isMy = false;
         data.sendStatus = "success";
         self.chatItems.push(data);
+      } else if (action == "CONVERSATION_HISTORY_SEND") {
+        self.chatItems = [...self.chatItems, ...data]
       }
     });
     this.websocket.connect(this.sysConstant.WEBSOCKET_HOST);

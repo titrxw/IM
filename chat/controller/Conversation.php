@@ -31,11 +31,16 @@ class Conversation extends User
             return [501, '发送失败'];
         }
 
-        // $result = $this->_covM->save($this->_uid, $uid, $text);
-        // if (!$result) {
-        //   return [501, '发送失败'];
-        // }
+        $result = $this->_covM->save($this->_uid, $uid, $text);
+        if (!$result) {
+          return [501, '发送失败'];
+        }
 
+
+        $this->redis->getHandle()->sAdd($this->_uid.':covs', $uid);
+        $this->redis->set($this->_uid . ':cov:' . $uid . ':last', ['type' => 'text', 'content' => $text, 'time' => time()]);
+        $this->redis->getHandle()->sAdd($uid.':covs', $this->_uid);
+        $this->redis->set($uid . ':cov:' . $this->_uid . ':last', ['type' => 'text', 'content' => $text, 'time' => time()]);
         $fd = $this->getFdByUid($uid);
         if ($fd) {
           $this->send($fd, [
@@ -46,5 +51,45 @@ class Conversation extends User
         }
 
         return [200, true];
+    }
+
+
+    /**
+     * @method get
+     * 
+     */
+    public function listApi()
+    {
+        $covs = $this->redis->getHandle()->sMembers($this->_uid.':covs');
+        $msgs = [];
+        foreach ($covs as $key => $value) {
+            # code...
+            $msg = $this->redis->get($this->_uid . ':cov:' . $value . ':last');
+            if ($msg) {
+                $msg['time'] = date('Y-m-d H:i:s', $msg['time']);
+                $msg['name'] = '测试';
+                $msg['union_id'] = $value;
+                $msgs[] = $msg;
+            }
+        }
+
+        return [200,$msgs];
+    }
+
+    /**
+     * @method get
+     * 
+     * @rule uid|get|参数错误 require
+     * @rule page|get|参数错误 require|integer
+     */
+    public function historyApi()
+    {
+        $uid = $this->request->get('uid');
+        $page = $this->request->get('page');
+        if ($uid == $this->_uid) {
+            return [200, []];
+        }
+
+        return [200,$this->_covM->list($this->_uid, $uid, $page)];
     }
 }
