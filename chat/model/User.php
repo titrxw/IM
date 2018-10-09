@@ -68,4 +68,31 @@ class User extends Model
     {
         return $this->db()->get('user', ['headimgurl', 'mobile','name'],['union_id' => $uid]);
     }
+
+    public function password($oldPwd, $newPwd, $uid)
+    {
+        $userInfo = $this->db()->get('user', ['password','salt'], ['union_id' => $uid]);
+        if (!$userInfo) {
+            return false;
+        }
+
+        $result = $this->password->setPassword($oldPwd)
+        ->setSalt($userInfo['salt'])
+        ->setHash($userInfo['password'])
+        ->validate();
+
+        if (!$result) {
+            return false;
+        }
+
+        $password = $this->password->setPassword($newPwd)->MakeHashStr();
+        $salt = $this->password->GetHashSalt();       
+        
+        $result = $this->db()->update('user', ['password' => $password,'salt' => $salt], ['union_id' => $uid]);
+        if ($result->rowCount()) {
+            return true;
+        }
+
+        return false;
+    }
 }

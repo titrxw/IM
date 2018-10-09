@@ -46,7 +46,21 @@ export default {
         this.$store.commit('msg', msg)
         return false;
       }
+      this.websocket.send({
+        'controller': 'member',
+        'action': 'password',
+        'data': this.form
+      })
     }
+  },
+  mounted: function () {
+    let self = this;
+    this.websocket.setOnMessage(function(data, action) {
+      if (action == 'MEMBER_PASSWORD_SEND') {
+        self.$router.go(-1)
+      }
+    });
+    this.websocket.connect(this.sysConstant.WEBSOCKET_HOST);
   }
 };
 </script>

@@ -5,6 +5,7 @@
           <img class="user-head-pic" :src="userInfo.headimgurl">
         </div>
         <div class="user-desc-box head-box">
+          <span class="user-desc name-font-size">{{ userInfo['name'] }}</span>
           <span class="user-desc name-font-size">{{ userInfo['mobile'] }}</span>
         </div>
       </div>
@@ -26,18 +27,18 @@ export default {
     let self = this;
     if (this.websocket._handle) {
       self.websocket.send({
-        'controller': 'user',
+        'controller': 'member',
         'action': 'info'
       })
     }
     this.websocket.setOnConnect(function (data, action) {
       self.websocket.send({
-        'controller': 'user',
+        'controller': 'member',
         'action': 'info'
       })
     })
     this.websocket.setOnMessage(function(data, action) {
-      if (action == 'USER_INFO_SEND') {
+      if (action == 'MEMBER_INFO_SEND') {
         self.userInfo = data
       }
     });
