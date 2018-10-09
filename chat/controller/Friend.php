@@ -29,7 +29,6 @@ class Friend extends User
             return [200, false];
         }
 
-
         return [200, $this->_friendM->findUserByMobile($this->_uid, $mobile)];
     }
 
@@ -104,6 +103,4 @@ class Friend extends User
     {
         return [200, $this->_friendM->list($this->_uid)];
     }
-
-
 }

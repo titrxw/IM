@@ -41,6 +41,8 @@ class Conversation extends User
         $this->redis->set($this->_uid . ':cov:' . $uid . ':last', ['type' => 'text', 'content' => $text, 'time' => time()]);
         $this->redis->getHandle()->sAdd($uid.':covs', $this->_uid);
         $this->redis->set($uid . ':cov:' . $this->_uid . ':last', ['type' => 'text', 'content' => $text, 'time' => time()]);
+
+        
         $fd = $this->getFdByUid($uid);
         if ($fd) {
           $this->send($fd, [
