@@ -63,4 +63,9 @@ class User extends Model
         unset($userInfo['password'], $userInfo['salt']);
         return $userInfo;
     }
+
+    public function info($uid)
+    {
+        return $this->db()->get('user', ['headimgurl', 'mobile','name'],['union_id' => $uid]);
+    }
 }
