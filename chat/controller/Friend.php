@@ -56,6 +56,7 @@ class Friend extends User
             $this->send($fd, [
                 'name' => $this->_user['name'],
                 'mobile' => $this->_user['mobile'],
+                'headimgurl' => $this->_user['headimgurl'],
                 'union_id' => $this->_uid
             ]);
         }
@@ -78,6 +79,7 @@ class Friend extends User
             if ($fd) {
                 $this->send($fd, [
                     'name' => $this->_user['name'],
+                    'headimgurl' => $this->_user['headimgurl'],
                     'mobile' => $this->_user['mobile'],
                     'union_id' => $this->_uid
                 ]);

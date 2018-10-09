@@ -28,6 +28,7 @@ class User extends Model
             'name' => $name,
             'mobile' => $mobile,
             'password' => $password,
+            'headimgurl' => 'https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3797481993,1929347741&fm=27&gp=0.jpg',
             'salt' => $salt,
             'timestamp' => time()
         ];
@@ -44,7 +45,7 @@ class User extends Model
 
     public function login($mobile, $password)
     {
-        $userInfo = $this->db()->get('user', ['union_id', 'mobile', 'password','salt', 'name'], [
+        $userInfo = $this->db()->get('user', ['union_id', 'mobile', 'password','salt', 'name', 'headimgurl'], [
             'mobile' => $mobile,
         ]);
         if (!$userInfo) {

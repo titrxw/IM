@@ -13,17 +13,17 @@ class Friend extends Model
 {
     public function list($uid)
     {
-        return $this->db()->select('friends', ['[><]user' => ['f_id' => 'union_id']], ['name', 'mobile', 'friends.f_id(union_id)'], ['s_id' => $uid]);
+        return $this->db()->select('friends', ['[><]user' => ['f_id' => 'union_id']], ['name', 'mobile',  'headimgurl', 'friends.f_id(union_id)'], ['s_id' => $uid]);
     }
 
     public function findUserByMobile($uid, $mobile) 
     {
-        $result = $this->db()->get('friends', ['[><]user' => ['f_id' => 'union_id']], ['name', 'mobile', 'friends.f_id(union_id)'], ['s_id' => $uid, 'mobile' => $mobile]);
+        $result = $this->db()->get('friends', ['[><]user' => ['f_id' => 'union_id']], ['name', 'mobile','headimgurl', 'friends.f_id(union_id)'], ['s_id' => $uid, 'mobile' => $mobile]);
         if ($result) {
             $result['is_friend'] = true;
             return $result;
         }
-        $result = $this->db()->get('user', ['name', 'mobile', 'union_id'], ['mobile' => $mobile]);
+        $result = $this->db()->get('user', ['name', 'mobile', 'union_id', 'headimgurl'], ['mobile' => $mobile]);
         if ($result) {
             return $result;
         } else {
@@ -66,12 +66,12 @@ class Friend extends Model
 
     public function addLogs($uid)
     {
-        $result['add'] = $this->db()->select('user_add_log', ['[><]user' => ['r_id' => 'union_id']], ['name', 'mobile', 'r_id(union_id)', 'user_add_log.status'], ['s_id' => $uid]);
+        $result['add'] = $this->db()->select('user_add_log', ['[><]user' => ['r_id' => 'union_id']], ['name', 'mobile', 'r_id(union_id)', 'user_add_log.status', 'headimgurl'], ['s_id' => $uid]);
 
         if ($result['add']) {
             $result['add'] = array_combine(array_column($result['add'], 'union_id'), $result['add']);
         }
-        $result['request'] = $this->db()->select('user_add_log', ['[><]user' => ['r_id' => 'union_id']], ['name', 'mobile', 'r_id(union_id)', 'user_add_log.status'], ['f_id' => $uid]);
+        $result['request'] = $this->db()->select('user_add_log', ['[><]user' => ['r_id' => 'union_id']], ['name', 'mobile', 'r_id(union_id)', 'user_add_log.status', 'headimgurl'], ['f_id' => $uid]);
         if ($result['request']) {
             $result['request'] = array_combine(array_column($result['add'], 'union_id'), $result['request']);
         }
