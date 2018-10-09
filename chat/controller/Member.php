@@ -32,7 +32,7 @@ class Member extends User
      * @rule new_password|get|新密码错误 require
      * @rule sure_password|get|确认密码错误 require
      */
-    public function registerApi()
+    public function passwordApi()
     {
         $password = $this->request->get('password');
         $newPassword = $this->request->get('new_password');
