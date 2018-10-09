@@ -53,7 +53,7 @@ export default {
     width:100%;
     background: url('../../assets/images/user-bg.png');
     background-size: 100% 100%;
-    padding-top: 14px;
+    padding-top: 35px;
     .head-bg-pic{
         position: absolute;
         display: block;
@@ -89,7 +89,7 @@ export default {
       width:100%;
       display: block;
       color:white;
-      margin-top:17px;
+      margin-top:7px;
       margin-left:10px;
       position: relative;
     }

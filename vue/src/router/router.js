@@ -86,5 +86,27 @@ export default [{
         component: function(resolve) {
             require(['../page/chat/msgs'], resolve)
         }
+    },
+    {
+        path: '/user',
+        meta: {
+            requireLogin: true,
+            showTabBar: true,
+            title: '聊天'
+        },
+        component: function(resolve) {
+            require(['../page/user/index'], resolve)
+        }
+    },
+    {
+        path: '/user/password',
+        meta: {
+            requireLogin: true,
+            showTabBar: true,
+            title: '聊天'
+        },
+        component: function(resolve) {
+            require(['../page/user/password'], resolve)
+        }
     }
 ]
