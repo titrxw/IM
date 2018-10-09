@@ -1,7 +1,7 @@
 <template>
     <div class="theme-padding-top">
       <div v-for="(item, index) in contacts" :key="index" @click="select(item.union_id)"  class="friends">
-        <img :src="item.icon"/>
+        <img :src="item.headimgurl"/>
         <div class="info">
           <span class="name">{{item.name}}</span>
           <span class="account">{{item.mobile}}</span>
@@ -23,7 +23,6 @@ export default {
   },
   mounted () {
     let self = this;
-    console.log(self)
     if (this.websocket._handle) {
       self.websocket.send({
         'controller': 'friend',

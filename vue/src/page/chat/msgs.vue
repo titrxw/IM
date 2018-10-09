@@ -2,7 +2,7 @@
 <div class="message">
   <div v-for="(item, index) in list" :key="index" class="item" @click="select(item.union_id)">
       <div class="header">
-          <img class="img" :src="item.icon"></img>
+          <img class="img" :src="item.headimgurl"></img>
       </div>
       <div class="content">
           <div class="name"><span>{{item.name}}</span> <span style="float:right;font-size:13px;color: #7b7b7b;">{{ item.time }}</span> </div>

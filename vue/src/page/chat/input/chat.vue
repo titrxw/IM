@@ -24,7 +24,7 @@ export default {
       if (!this.websocket._handle) {
         return false;
       }
-      data.headUrl =
+      data.headimgurl =
         "https://ss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=893776491,1251327685&fm=58";
       data.isMy = true;
       data.sendStatus = "success";
@@ -70,7 +70,7 @@ export default {
       if (action == "CONVERSATION_TEXT_SEND") {
         
       } else if (action == "CONVERSATION_TEXT_RECV") {
-        data.headUrl =
+        data.headimgurl =
           "https://ss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=893776491,1251327685&fm=58";
         data.isMy = false;
         data.sendStatus = "success";

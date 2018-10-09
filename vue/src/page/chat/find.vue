@@ -9,7 +9,7 @@
         @on-submit="onSubmit"></Search>
     <div class="theme-padding-top">
       <div v-for="(item, index) in addPeoples" :key="index"  class="people">
-        <img :src="item.icon"/>
+        <img :src="item.headimgurl"/>
         <div class="info">
           <span class="name">{{item.name}}</span>
           <span class="account">{{item.mobile}}</span>
@@ -22,7 +22,7 @@
     </div>
     <div class="theme-padding-top">
       <div v-for="(item, index) in requestPeoples" :key="index"  class="people">
-        <img :src="item.icon"/>
+        <img :src="item.headimgurl"/>
         <div class="info">
           <span class="name">{{item.name}}</span>
           <span class="account">{{item.mobile}}</span>

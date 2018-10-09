@@ -5,7 +5,7 @@
         </div>
         <div :style="'width: 100%;display: flex;flex-direction:' + (item.isMy?'row-reverse;':'row;') + 'margin-bottom:' + (index===length-1?150:20) + 'px;margin-top: 20px;'">
           <img style="width: 40px;height: 40px;border-radius: 50%;margin-left: 15px;margin-right: 0px;"
-                :src="item.headUrl"/>
+                :src="item.headimgurl"/>
           <img v-if="item.type==='text'" class="chat-list-arrow-style"
                 :src="'./../../assets/images/chat/popu_' + (item.isMy ? 'blue':'white') + '.png'"/>
           <p v-if="item.type==='text'" :class="item.isMy ? 'isMyWordStyle':'isOtherWordStyle'"
