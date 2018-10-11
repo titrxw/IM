@@ -23,7 +23,13 @@ class Conversation extends Model
     public function list($sendUid, $recvUid, $page)
     {
         $roomId = $sendUid > $recvUid ? hash33($recvUid.$sendUid) : hash33($sendUid.$recvUid); 
-        $result =$this->db()->select('conversation',['s_id','content','type', 's_headimgurl'], ['room_id' => $roomId,'LIMIT' => [($page - 1) * $this->_pageSize, $this->_pageSize], 'ORDER' => ['id' => 'ASC','timestamp' => 'DESC']]);
+        $result =$this->db()->select('conversation',['s_id','content','type', 's_headimgurl', 'timestamp'], ['room_id' => $roomId,'LIMIT' => [($page - 1) * $this->_pageSize, $this->_pageSize], 'ORDER' => ['timestamp' => 'DESC']]);
+        if (!$result) {
+            return [];
+        }
+        $result = \array_combine(\array_column($result, 'timestamp'), $result);
+        ksort($result);
+        $result = array_values($result);
         // data.isMy = true;
     //   data.sendStatus = "success";
         foreach ($result as &$value) {
