@@ -16,7 +16,8 @@ export default {
     return {
       unionId: '',
       chatItems: [],
-      pageHeight: 400
+      pageHeight: 400,
+      userInfo: {}
     };
   },
   methods: {
@@ -24,8 +25,7 @@ export default {
       if (!this.websocket._handle) {
         return false;
       }
-      data.headimgurl =
-        "https://ss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=893776491,1251327685&fm=58";
+      data.headimgurl = this.userInfo.headimgurl
       data.isMy = true;
       data.sendStatus = "success";
       if (data.type == "image") {
@@ -46,6 +46,9 @@ export default {
     this.unionId = this.$route.query.uid
     if (this.websocket._handle) {
       this.websocket.send({
+        'action': 'MEMBER_INFO'
+      })
+      this.websocket.send({
         'action': 'CONVERSATION_HISTORY',
         'data': {
           uid:this.unionId,
@@ -56,6 +59,9 @@ export default {
     let self = this;
     this.websocket.setOnConnect(function (data, action) {
       self.websocket.send({
+        'action': 'MEMBER_INFO'
+      })
+      self.websocket.send({
         'action': 'CONVERSATION_HISTORY',
         'data': {
           uid:self.unionId,
@@ -64,11 +70,11 @@ export default {
       })
     })
     this.websocket.setOnMessage(function(data, action) {
-      if (action == "CONVERSATION_TEXT_SEND") {
+      if (action == 'MEMBER_INFO_SEND') {
+        self.userInfo = data
+      } else if (action == "CONVERSATION_TEXT_SEND") {
         
       } else if (action == "CONVERSATION_TEXT_RECV") {
-        data.headimgurl =
-          "https://ss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=893776491,1251327685&fm=58";
         data.isMy = false;
         data.sendStatus = "success";
         self.chatItems.push(data);

@@ -55,7 +55,7 @@ export default {
       let result = await api.register(this.form);
       if (result) {
         let that = this
-        this.websocket.setOnMessage(function (event) {
+        this.websocket.setOnMessage(function (action, data) {
           if (action == 'COMMON_USERBINDFD_SEND') {
             that.websocket.setOnMessage(null)
               that.$router.push('/')

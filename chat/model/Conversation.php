@@ -13,20 +13,19 @@ class Conversation extends Model
 {
     protected $_pageSize = 10;
 
-    public function save($sendUid, $recvUid, $text)
+    public function save($sendUid, $recvUid, $text, $sheadimgurl)
     {
         $roomId = $sendUid > $recvUid ? hash33($recvUid.$sendUid) : hash33($sendUid.$recvUid); 
-        $result = $this->db()->insert('conversation', ['room_id' => $roomId, 's_id' => $sendUid, 'r_id' => $recvUid, 'content' => $text, 'type' => 'text', 'timestamp' => time()]);
+        $result = $this->db()->insert('conversation', ['room_id' => $roomId, 's_id' => $sendUid, 'r_id' => $recvUid, 'content' => $text, 'type' => 'text','s_headimgurl' => $sheadimgurl, 'timestamp' => time()]);
         return $result->rowCount() ? true : false;
     }
 
     public function list($sendUid, $recvUid, $page)
     {
         $roomId = $sendUid > $recvUid ? hash33($recvUid.$sendUid) : hash33($sendUid.$recvUid); 
-        $result =$this->db()->select('conversation',['s_id','content','type'], ['room_id' => $roomId,'LIMIT' => [($page - 1) * $this->_pageSize, $this->_pageSize], 'ORDER' => ['id' => 'ASC','timestamp' => 'DESC']]);
+        $result =$this->db()->select('conversation',['s_id','content','type', 's_headimgurl'], ['room_id' => $roomId,'LIMIT' => [($page - 1) * $this->_pageSize, $this->_pageSize], 'ORDER' => ['id' => 'ASC','timestamp' => 'DESC']]);
         // data.isMy = true;
     //   data.sendStatus = "success";
-        
         foreach ($result as &$value) {
             # code...
             $value['isMy'] = false;
@@ -34,6 +33,8 @@ class Conversation extends Model
             if ($value['s_id'] == $sendUid) {
                 $value['isMy'] = true;
             }
+            $value['headimgurl'] =  $value['s_headimgurl'];
+            unset($value['s_headimgurl'], $value['r_headimgurl']);
         }
 
         return $result;

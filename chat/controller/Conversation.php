@@ -31,16 +31,18 @@ class Conversation extends User
             return [501, '发送失败'];
         }
 
-        $result = $this->_covM->save($this->_uid, $uid, $text);
+        $muser = $this->model('User')->info($this->_uid);
+        $result = $this->_covM->save($this->_uid, $uid, $text, $muser['headimgurl'] ?? '');
         if (!$result) {
           return [501, '发送失败'];
         }
 
 
         $this->redis->getHandle()->sAdd($this->_uid.':covs', $uid);
-        $this->redis->set($this->_uid . ':cov:' . $uid . ':last', ['type' => 'text', 'content' => $text, 'time' => time()]);
+        $this->redis->set($this->_uid . ':cov:' . $uid . ':last', ['name' => $user['name'] ?? '','headimgurl' => $user['headimgurl'] ?? '', 'type' => 'text', 'content' => $text, 'time' => time()]);
         $this->redis->getHandle()->sAdd($uid.':covs', $this->_uid);
-        $this->redis->set($uid . ':cov:' . $this->_uid . ':last', ['type' => 'text', 'content' => $text, 'time' => time()]);
+        $user = $this->model('User')->info($uid);
+        $this->redis->set($uid . ':cov:' . $this->_uid . ':last', ['name' => $muser['name'] ?? '','headimgurl' => $muser['headimgurl'] ?? '','type' => 'text', 'content' => $text, 'time' => time()]);
 
         
         $fd = $this->getFdByUid($uid);
@@ -48,7 +50,8 @@ class Conversation extends User
           $this->send($fd, [
               'type' => 'text',
               'from' => $this->getUser($this->_uid),
-              'content' => $text
+              'content' => $text,
+              'headimgurl' => $muser['headimgurl'] ?? ''
           ]);
         }
 
@@ -69,7 +72,6 @@ class Conversation extends User
             $msg = $this->redis->get($this->_uid . ':cov:' . $value . ':last');
             if ($msg) {
                 $msg['time'] = date('Y-m-d H:i:s', $msg['time']);
-                $msg['name'] = '测试';
                 $msg['union_id'] = $value;
                 $msgs[] = $msg;
             }

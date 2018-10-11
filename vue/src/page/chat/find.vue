@@ -114,6 +114,7 @@ export default {
         if (!data) {
           return false;
         }
+        console.log(data)
         self.$set(self.addPeoples, data.union_id, data)
       } else if (action == "FRIEND_ADD_SEND") {
         self.$store.commit("msg", "添加好友请求发送成功");

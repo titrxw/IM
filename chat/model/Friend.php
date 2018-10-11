@@ -55,7 +55,7 @@ class Friend extends Model
                 return false;
             }
             $result = $this->db()->insert('friends', ['s_id' => $sendUid, 'f_id' => $recvUid, 'timestamp' => time()]);
-            if (!$result->rowCouyjfnt()) {
+            if (!$result->rowCount()) {
                 $sendUid = false;
                 return false;
             }
@@ -67,13 +67,14 @@ class Friend extends Model
     public function addLogs($uid)
     {
         $result['add'] = $this->db()->select('user_add_log', ['[><]user' => ['r_id' => 'union_id']], ['name', 'mobile', 'r_id(union_id)', 'user_add_log.status', 'headimgurl'], ['s_id' => $uid]);
-
+        $result['add'] = $result['add'] ? $result['add'] : false;
         if ($result['add']) {
             $result['add'] = array_combine(array_column($result['add'], 'union_id'), $result['add']);
         }
-        $result['request'] = $this->db()->select('user_add_log', ['[><]user' => ['r_id' => 'union_id']], ['name', 'mobile', 'r_id(union_id)', 'user_add_log.status', 'headimgurl'], ['f_id' => $uid]);
+        $result['request'] = $this->db()->select('user_add_log', ['[><]user' => ['s_id' => 'union_id']], ['name', 'mobile', 's_id(union_id)', 'user_add_log.status', 'headimgurl'], ['r_id' => $uid]);
+        $result['request'] = $result['request'] ? $result['request'] : false;
         if ($result['request']) {
-            $result['request'] = array_combine(array_column($result['add'], 'union_id'), $result['request']);
+            $result['request'] = array_combine(array_column($result['request'], 'union_id'), $result['request']);
         }
         return $result;
     }
