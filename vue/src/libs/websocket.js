@@ -51,8 +51,7 @@ export default class MyWebSocket {
         //与WebSocket建立连接
         this._handle.onopen = function(event) {
             that.send({
-                'controller': 'common',
-                'action': 'userBindFd',
+                'action': 'COMMON_USERBINDFD',
                 'data': {
                     'uid': user.getToken()
                 }

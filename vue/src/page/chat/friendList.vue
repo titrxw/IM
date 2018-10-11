@@ -25,14 +25,12 @@ export default {
     let self = this;
     if (this.websocket._handle) {
       self.websocket.send({
-        'controller': 'friend',
-        'action': 'list'
+        'action': 'FRIEND_LIST'
       })
     }
     this.websocket.setOnConnect(function (data, action) {
       self.websocket.send({
-        'controller': 'friend',
-        'action': 'list'
+        'action': 'FRIEND_LIST'
       })
     })
     this.websocket.setOnMessage(function(data, action) {

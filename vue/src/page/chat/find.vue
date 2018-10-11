@@ -58,8 +58,7 @@ export default {
         return false;
       }
       this.websocket.send({
-        controller: "friend",
-        action: "findUserByMobile",
+        'action': 'FRIEND_FINDUSERBYMOBILE',
         data: {
           mobile: this.searchValue
         }
@@ -67,8 +66,7 @@ export default {
     },
     addFriend(uid) {
       this.websocket.send({
-        controller: "friend",
-        action: "add",
+        'action': 'FRIEND_ADD',
         data: {
           uid: uid
         }
@@ -79,8 +77,7 @@ export default {
     },
     sureAddFriend(uid) {
       this.websocket.send({
-        controller: "friend",
-        action: "sureAdd",
+        'action': 'FRIEND_SUREADD',
         data: {
           uid: uid
         }
@@ -91,14 +88,12 @@ export default {
     let self = this;
     if (this.websocket._handle) {
       self.websocket.send({
-        'controller': 'friend',
-        'action': 'addLog'
+        'action': 'FRIEND_ADDLOG'
       })
     }
     this.websocket.setOnConnect(function (data, action) {
       self.websocket.send({
-        'controller': 'friend',
-        'action': 'addLog'
+        'action': 'FRIEND_ADDLOG'
       })
     })
     this.websocket.setOnMessage(function(data, action) {

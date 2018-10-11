@@ -47,8 +47,7 @@ export default {
         return false;
       }
       this.websocket.send({
-        'controller': 'member',
-        'action': 'password',
+        'action': 'MEMBER_PASSWORD',
         'data': this.form
       })
     }

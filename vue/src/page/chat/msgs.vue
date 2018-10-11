@@ -32,15 +32,13 @@ export default {
     });
     this.websocket.setOnConnect(function (data, action) {
       self.websocket.send({
-        'controller': 'conversation',
-        'action': 'list'
+        'action': 'CONVERSATION_LIST'
       })
     })
     
     if (this.websocket._handle) {
       this.websocket.send({
-        'controller': 'conversation',
-        'action': 'list'
+        'action': 'CONVERSATION_LIST'
       })
     } else {
       this.websocket.connect(this.sysConstant.WEBSOCKET_HOST)

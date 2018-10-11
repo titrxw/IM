@@ -33,8 +33,7 @@ export default {
       }
       this.chatItems.push(data);
       this.websocket.send({
-        controller: "conversation",
-        action: "text",
+        'action': 'CONVERSATION_TEXT',
         data: {
           uid: this.unionId,
           text: data.content
@@ -47,8 +46,7 @@ export default {
     this.unionId = this.$route.query.uid
     if (this.websocket._handle) {
       this.websocket.send({
-        'controller': 'conversation',
-        'action': 'history',
+        'action': 'CONVERSATION_HISTORY',
         'data': {
           uid:this.unionId,
           page : 1
@@ -58,8 +56,7 @@ export default {
     let self = this;
     this.websocket.setOnConnect(function (data, action) {
       self.websocket.send({
-        'controller': 'conversation',
-        'action': 'history',
+        'action': 'CONVERSATION_HISTORY',
         'data': {
           uid:self.unionId,
           page : 1
