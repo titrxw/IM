@@ -23,7 +23,7 @@ export default {
       this.$router.push('/chat/input?uid=' + id)
     },
     getMsgList () {
-      if (this.msgList.length == 0) {
+      if (JSON.stringify(this.msgList) == '{}') {
         this.websocket.send({
           'action': 'CONVERSATION_LIST'
         })

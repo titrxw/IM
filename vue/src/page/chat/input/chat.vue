@@ -7,6 +7,7 @@
 <script>
 import chatItem from "./chat-item";
 import chatInput from "./chat-input";
+import { mapState } from 'vuex'
 export default {
   components: {
     chatItem,
@@ -16,9 +17,13 @@ export default {
     return {
       unionId: '',
       chatItems: [],
-      pageHeight: 400,
-      userInfo: {}
+      pageHeight: 400
     };
+  },
+  computed: {
+    ...mapState([
+      'userInfo'
+    ])
   },
   methods: {
     beforeSend(data) {
@@ -40,14 +45,15 @@ export default {
         }
       })
     },
-    resend(data) {}
-  },
-  mounted () {
-    this.unionId = this.$route.query.uid
-    if (this.websocket._handle) {
-      this.websocket.send({
-        'action': 'MEMBER_INFO'
-      })
+    resend(data) {},
+    getUserInfo() {
+      if (JSON.stringify(this.userInfo) == "{}") {
+        this.websocket.send({
+          action: "MEMBER_INFO"
+        });
+      }
+    },
+    getConversations() {
       this.websocket.send({
         'action': 'CONVERSATION_HISTORY',
         'data': {
@@ -56,23 +62,20 @@ export default {
         }
       })
     }
+  },
+  mounted () {
+    this.unionId = this.$route.query.uid
+    if (this.websocket._handle) {
+      this.getUserInfo()
+      this.getConversations()
+    }
     let self = this;
     this.websocket.setOnConnect(function (data, action) {
-      self.websocket.send({
-        'action': 'MEMBER_INFO'
-      })
-      self.websocket.send({
-        'action': 'CONVERSATION_HISTORY',
-        'data': {
-          uid:self.unionId,
-          page : 1
-        }
-      })
+      self.getUserInfo()
+      self.getConversations()
     })
     this.websocket.setOnMessage(function(data, action) {
-      if (action == 'MEMBER_INFO_SEND') {
-        self.userInfo = data
-      } else if (action == "CONVERSATION_TEXT_SEND") {
+      if (action == "CONVERSATION_TEXT_SEND") {
         
       } else if (action == "CONVERSATION_TEXT_RECV") {
         data.isMy = false;

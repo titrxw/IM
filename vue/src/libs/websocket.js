@@ -71,9 +71,11 @@ export default class MyWebSocket {
       // 收到添加好友请求
       // data.uid 为好友的id
       // 更改addPeoples的status
-      store.commit('FRIEND_SUREADD_SEND', data)
+      store.commit('FRIEND_SUREADD_RECV', data)
     } else if (action == 'MEMBER_INFO_SEND') {
       store.commit('MEMBER_INFO_SEND', data)
+    } else if (action == 'CONVERSATION_TEXT_SEND' || action == 'CONVERSATION_TEXT_RECV') {
+        store.commit('CUR_CONVERSATION', data)
     }
     this._onMessage && this._onMessage(data, action);
   }

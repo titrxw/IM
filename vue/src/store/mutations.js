@@ -11,6 +11,9 @@ const mutations = {
     CONVERSATION_LIST_SEND(state, data) {
         state.msgList = data
     },
+    CUR_CONVERSATION (state, data) {
+        state.msgList[data.union_id] = data
+    },
     FRIEND_LIST_SEND (state, data) {
         state.contacts = data
     },
@@ -27,12 +30,14 @@ const mutations = {
         state.requestPeoples[data.union_id] = data
     },
     FRIEND_SUREADD_SEND (state, data) {
+        state.contacts.push(data)
         state.requestPeoples[data]['is_friend'] = true
         if (state.addPeoples[data]) {
             state.addPeoples[data]['is_friend'] = true
         }
     },
     FRIEND_SUREADD_RECV (state, data) {
+        state.contacts.push(data)
         state.addPeoples[data.union_id]['is_friend'] = true
         if (state.requestPeoples[data.union_id]) {
             state.requestPeoples[data.union_id]['is_friend'] = true

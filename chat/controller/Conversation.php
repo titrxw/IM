@@ -48,14 +48,23 @@ class Conversation extends User
         $fd = $this->getFdByUid($uid);
         if ($fd) {
           $this->send($fd, [
+              'union_id' => $this->_uid,
               'type' => 'text',
-              'from' => $this->getUser($this->_uid),
               'content' => $text,
-              'headimgurl' => $muser['headimgurl'] ?? ''
+              'name' => $muser['name'] ?? '',
+              'headimgurl' => $muser['headimgurl'] ?? '',
+              'time' => time()
           ]);
         }
 
-        return [200, true];
+        return [200, [
+            'union_id' => $uid,
+            'type' => 'text',
+            'content' => $text,
+            'name' => $user['name'] ?? '',
+            'headimgurl' => $user['headimgurl'] ?? '',
+            'time' => time()
+        ]];
     }
 
 
