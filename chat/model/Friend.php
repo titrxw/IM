@@ -40,11 +40,19 @@ class Friend extends Model
         ];
 
         $result = [];
+        $fids = [];
         $response = $this->client->search($params);
         if (!empty($response['hits']) && $response['hits']['total'] > 0){
             foreach($response['hits']['hits'] as $item) {
+                $fids[] = $item['_source']['union_id'];
                 $item['_source']['is_friend'] = false;
                 $result[$item['_source']['union_id']] = $item['_source'];
+            }
+            if ($result) {
+                $frients = $this->db()->select('friends','f_id',['s_id' => $uid, 'f_id' => $fids]);
+                foreach($frients as $item) {
+                    $result[$item]['is_friend'] = true;
+                }
             }
         }
 
