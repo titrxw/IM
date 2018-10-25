@@ -38,29 +38,34 @@
 <script>
 import Search from "@/components/search";
 import Validate from "@/libs/validate";
+import {mapState} from 'vuex'
 export default {
   data() {
     return {
       searchValue: "",
-      searchResults: [],
-      addPeoples: {},
-      requestPeoples: {}
+      searchResults: []
     };
   },
   components: {
     Search
   },
+  computed: {
+    ...mapState([
+        'addPeoples',
+        'requestPeoples'
+    ])
+  },
   methods: {
     onCancel() {},
     onSubmit() {
-      if (!Validate.isMobile(this.searchValue)) {
-        this.$store.commit("msg", "请输入正确的手机号码");
+      if (!this.searchValue) {
+        this.$store.commit("msg", "请输入搜索条件");
         return false;
       }
       this.websocket.send({
-        'action': 'FRIEND_FINDUSERBYMOBILE',
+        'action': 'FRIEND_FINDUSER',
         data: {
-          mobile: this.searchValue
+          keyword: this.searchValue
         }
       });
     },
@@ -82,65 +87,23 @@ export default {
           uid: uid
         }
       });
+    },
+    getAddLogs () {
+      if (JSON.stringify(this.addPeoples) == '{}' || JSON.stringify(this.requestPeoples) == '{}') {
+        this.websocket.send({
+          'action': 'FRIEND_ADDLOG'
+        })
+      }
     }
   },
   mounted() {
     let self = this;
     if (this.websocket._handle) {
-      self.websocket.send({
-        'action': 'FRIEND_ADDLOG'
-      })
+      self.getAddLogs()
     }
-    this.websocket.setOnConnect(function (data, action) {
-      self.websocket.send({
-        'action': 'FRIEND_ADDLOG'
-      })
+    this.websocket.setOnConnect(function (data) {
+      self.getAddLogs()
     })
-    this.websocket.setOnMessage(function(data, action) {
-      if (action == 'FRIEND_ADDLOG_SEND') {
-        if (data.add) {
-          for (let index in data.add) {
-            data.add[index].is_friend = data.add[index].status == 1 ? false : true
-          }
-          self.addPeoples = data.add
-        }
-        if (data.request) {
-          for (let index in data.request) {
-            data.request[index].is_friend = data.request[index].status == 1 ? false : true
-          }
-          self.requestPeoples = data.request
-        }
-      } else if (action == "FRIEND_FINDUSERBYMOBILE_SEND") {
-        if (!data) {
-          return false;
-        }
-        console.log(data)
-        self.$set(self.addPeoples, data.union_id, data)
-      } else if (action == "FRIEND_ADD_SEND") {
-        self.$store.commit("msg", "添加好友请求发送成功");
-        // 发送成功
-      } else if (action == "FRIEND_ADD_RECV") {
-        // 收到添加好友请求
-        data.is_friend = false;
-        self.$set(self.requestPeoples, data.union_id, data)
-      } else if (action == "FRIEND_SUREADD_SEND") {
-        // data 为 uid
-        // 更改 requestPeople 的status
-        self.$set(self.requestPeoples[data], 'is_friend', true)
-        if (self.addPeoples[data]) {
-          self.$set(self.addPeoples[data], 'is_friend', true)
-        }
-        self.$store.commit("msg", "添加好友成功");
-      } else if (action == "FRIEND_SUREADD_RECV") {
-        // 收到添加好友请求
-        // data.uid 为好友的id
-        // 更改addPeoples的status
-        self.$set(self.addPeoples[data.union_id], 'is_friend', true)
-        if (self.requestPeoples[data.union_id]) {
-          self.$set(self.requestPeoples[data.union_id], 'is_friend', true)
-        }
-      }
-    });
     this.websocket.connect(this.sysConstant.WEBSOCKET_HOST);
   }
 };

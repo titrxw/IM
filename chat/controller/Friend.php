@@ -28,20 +28,20 @@ class Friend extends User
         return [200, $this->_friendM->findUser($this->_uid, $keyword)];
     }
 
-    /**
-     * @method get
-     * 
-     * @rule mobile|get|账号格式错误 regex|/^1[34578]\d{9}$/  
-     */
-    public function findUserByMobileApi()
-    {
-        $mobile = $this->request->get('mobile');
-        if ($mobile == $this->_user['mobile']) {
-            return [200, false];
-        }
+    // /**
+    //  * @method get
+    //  * 
+    //  * @rule mobile|get|账号格式错误 regex|/^1[34578]\d{9}$/  
+    //  */
+    // public function findUserByMobileApi()
+    // {
+    //     $mobile = $this->request->get('mobile');
+    //     if ($mobile == $this->_user['mobile']) {
+    //         return [200, false];
+    //     }
 
-        return [200, $this->_friendM->findUserByMobile($this->_uid, $mobile)];
-    }
+    //     return [200, $this->_friendM->findUserByMobile($this->_uid, $mobile)];
+    // }
 
     /**
      * @method get

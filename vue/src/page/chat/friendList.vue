@@ -10,34 +10,37 @@
     </div>
 </template>
 <script>
+import { mapState } from 'vuex'
 export default {
   data: function() {
     return {
-      contacts: []
     };
   },
   methods: {
     select(id) {
       this.$router.push('/chat/input?uid=' + id)
+    },
+    getFriendList () {
+      if (this.contacts.length == 0) {
+        this.websocket.send({
+          'action': 'FRIEND_LIST'
+        })
+      }
     }
+  },
+  computed: {
+    ...mapState([
+        'contacts'
+    ])
   },
   mounted () {
     let self = this;
     if (this.websocket._handle) {
-      self.websocket.send({
-        'action': 'FRIEND_LIST'
-      })
+      self.getFriendList()
     }
-    this.websocket.setOnConnect(function (data, action) {
-      self.websocket.send({
-        'action': 'FRIEND_LIST'
-      })
+    this.websocket.setOnConnect(function (data) {
+      self.getFriendList()
     })
-    this.websocket.setOnMessage(function(data, action) {
-      if (action == 'FRIEND_LIST_SEND') {
-        self.contacts = data
-      }
-    });
     this.websocket.connect(this.sysConstant.WEBSOCKET_HOST);
   }
 };

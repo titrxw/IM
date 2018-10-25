@@ -1,6 +1,6 @@
 <template>
 <div class="message">
-  <div v-for="(item, index) in list" :key="index" class="item" @click="select(item.union_id)">
+  <div v-for="(item, index) in msgList" :key="index" class="item" @click="select(item.union_id)">
       <div class="header">
           <img class="img" :src="item.headimgurl"></img>
       </div>
@@ -12,37 +12,38 @@
 </div>
 </template>
 <script>
+import { mapState } from 'vuex'
 export default {
   data: function() {
     return {
-      list: []
     };
   },
   methods: {
     select(id) {
       this.$router.push('/chat/input?uid=' + id)
+    },
+    getMsgList () {
+      if (this.msgList.length == 0) {
+        this.websocket.send({
+          'action': 'CONVERSATION_LIST'
+        })
+      }
     }
+  },
+  computed: {
+    ...mapState([
+        'msgList'
+    ])
   },
   mounted () {
     let self = this
-    this.websocket.setOnMessage(function (data,action) {
-      if (action == 'CONVERSATION_LIST_SEND') {
-        self.list = data
-      }
-    });
-    this.websocket.setOnConnect(function (data, action) {
-      self.websocket.send({
-        'action': 'CONVERSATION_LIST'
-      })
+    this.websocket.setOnConnect(function (data) {
+      self.getMsgList()
     })
-    
     if (this.websocket._handle) {
-      this.websocket.send({
-        'action': 'CONVERSATION_LIST'
-      })
-    } else {
-      this.websocket.connect(this.sysConstant.WEBSOCKET_HOST)
+      self.getMsgList()
     }
+    this.websocket.connect(this.sysConstant.WEBSOCKET_HOST)
   }
 };
 </script>

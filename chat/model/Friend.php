@@ -59,20 +59,20 @@ class Friend extends Model
         return $result;
     }
 
-    public function findUserByMobile($uid, $mobile) 
-    {
-        $result = $this->db()->get('friends', ['[><]user' => ['f_id' => 'union_id']], ['name', 'mobile','headimgurl', 'friends.f_id(union_id)'], ['s_id' => $uid, 'mobile' => $mobile]);
-        if ($result) {
-            $result['is_friend'] = true;
-            return $result;
-        }
-        $result = $this->db()->get('user', ['name', 'mobile', 'union_id', 'headimgurl'], ['mobile' => $mobile]);
-        if ($result) {
-            return $result;
-        } else {
-            return false;
-        }
-    }
+    // public function findUserByMobile($uid, $mobile) 
+    // {
+    //     $result = $this->db()->get('friends', ['[><]user' => ['f_id' => 'union_id']], ['name', 'mobile','headimgurl', 'friends.f_id(union_id)'], ['s_id' => $uid, 'mobile' => $mobile]);
+    //     if ($result) {
+    //         $result['is_friend'] = true;
+    //         return $result;
+    //     }
+    //     $result = $this->db()->get('user', ['name', 'mobile', 'union_id', 'headimgurl'], ['mobile' => $mobile]);
+    //     if ($result) {
+    //         return $result;
+    //     } else {
+    //         return false;
+    //     }
+    // }
 
     public function add($sendUid, $recvUid)
     {

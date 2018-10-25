@@ -57,6 +57,25 @@ export default {
         this.websocket.connect(this.sysConstant.WEBSOCKET_HOST)
       }
     }
+  },
+  mounted () {
+    let self = this;
+    if (this.websocket._handle) {
+      self.websocket.send({
+        'action': 'MEMBER_INFO'
+      })
+    }
+    this.websocket.setOnConnect(function (data, action) {
+      self.websocket.send({
+        'action': 'MEMBER_INFO'
+      })
+    })
+    this.websocket.setOnMessage(function(data, action) {
+      if (action == 'MEMBER_INFO_SEND') {
+        self.userInfo = data
+      }
+    });
+    this.websocket.connect(this.sysConstant.WEBSOCKET_HOST);
   }
 };
 </script>
