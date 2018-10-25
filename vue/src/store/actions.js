@@ -1,38 +1,38 @@
 export default {
-  getUserInfo = ({
+  getUserInfo ({
     commit,
     state
-  }, websocket) => {
+  }, websocket)  {
     if (JSON.stringify(state.userInfo) == "{}") {
       websocket.send({
         action: "MEMBER_INFO"
       });
     }
   },
-  getAddLogs = ({
+  getAddLogs ({
     commit,
     state
-  }, websocket) => {
+  }, websocket) {
     if (JSON.stringify(state.addPeoples) == '{}' || JSON.stringify(state.requestPeoples) == '{}') {
       websocket.send({
         action: "FRIEND_ADDLOG"
       });
     }
   },
-  getFriendList = ({
+  getFriendList ({
     commit,
     state
-  }, websocket) => {
+  }, websocket) {
     if (state.contacts.length == 0) {
       websocket.send({
         action: "FRIEND_LIST"
       });
     }
   },
-  getMsgList = ({
+  getMsgList ({
     commit,
     state
-  }, websocket) => {
+  }, websocket) {
     if (JSON.stringify(state.msgList) == '{}') {
       websocket.send({
         action: "CONVERSATION_LIST"
