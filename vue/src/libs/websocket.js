@@ -58,7 +58,6 @@ export default class MyWebSocket {
       store.commit('FRIEND_FINDUSER_SEND', data)
     } else if (action == "FRIEND_ADD_SEND") {
       store.commit("msg", "添加好友请求发送成功");
-      // 发送成功
     } else if (action == "FRIEND_ADD_RECV") {
       // 收到添加好友请求
       data.is_friend = false;
@@ -73,8 +72,10 @@ export default class MyWebSocket {
       // data.uid 为好友的id
       // 更改addPeoples的status
       store.commit('FRIEND_SUREADD_SEND', data)
+    } else if (action == 'MEMBER_INFO_SEND') {
+      store.commit('MEMBER_INFO_SEND', data)
     }
-    that._onMessage && that._onMessage();
+    this._onMessage && this._onMessage(data, action);
   }
 
   connect(host) {

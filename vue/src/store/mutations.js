@@ -5,7 +5,7 @@ const mutations = {
     msg(state, msg) {
         state.msg = msg
     },
-    userInfo(state, data) {
+    MEMBER_INFO_SEND(state, data) {
         state.userInfo = data
     },
     CONVERSATION_LIST_SEND(state, data) {

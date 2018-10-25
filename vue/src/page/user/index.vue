@@ -17,78 +17,80 @@
     </div>
 </template>
 <script>
+import { mapState } from "vuex";
 export default {
-  data () {
-    return {
-      userInfo: {}
+  data() {
+    return {};
+  },
+  computed: {
+    ...mapState(["userInfo"])
+  },
+  methods: {
+    getUserInfo() {
+      if (JSON.stringify(this.userInfo) == "{}") {
+        this.websocket.send({
+          action: "MEMBER_INFO"
+        });
+      }
     }
   },
-  mounted: function () {
+  mounted: function() {
     let self = this;
     if (this.websocket._handle) {
-      self.websocket.send({
-        'action': 'MEMBER_INFO'
-      })
+      self.getUserInfo();
     }
-    this.websocket.setOnConnect(function (data, action) {
-      self.websocket.send({
-        'action': 'MEMBER_INFO'
-      })
-    })
-    this.websocket.setOnMessage(function(data, action) {
-      if (action == 'MEMBER_INFO_SEND') {
-        self.userInfo = data
-      }
+    this.websocket.setOnConnect(function(data, action) {
+      self.getUserInfo();
     });
     this.websocket.connect(this.sysConstant.WEBSOCKET_HOST);
   }
-}
+};
 </script>
 <style scoped lang="less">
-.user-center{
-  .head-bg{
+.user-center {
+  .head-bg {
     height: 150px;
-    width:100%;
-    background: url('../../assets/images/user-bg.png');
+    width: 100%;
+    background: url("../../assets/images/user-bg.png");
     background-size: 100% 100%;
     padding-top: 35px;
-    .head-bg-pic{
-        position: absolute;
-        display: block;
-        top: 0px;
-        width: 100%;
-        height: 162px;
+    .head-bg-pic {
+      position: absolute;
+      display: block;
+      top: 0px;
+      width: 100%;
+      height: 162px;
     }
   }
-  .user-head-bg{
-      height: 70px;
-      width: 70px;
-      background: #fff;
-      position: relative;
-      padding: 1px;
-      margin-left:10px;
+  .user-head-bg {
+    height: 70px;
+    width: 70px;
+    background: #fff;
+    position: relative;
+    padding: 1px;
+    margin-left: 10px;
+    border-radius: 100%;
+    .user-head-pic {
+      height: 100%;
+      width: 100%;
       border-radius: 100%;
-      .user-head-pic{
-        height: 100%;
-        width: 100%;
-        border-radius: 100%;
-        position: relative;
+      position: relative;
     }
   }
-  .head-box{
-    float:left;
+  .head-box {
+    float: left;
   }
-  .user-desc-box{
+  .user-desc-box {
     height: 50px;
     width: 160px;
     margin-top: 8px;
-    .user-desc{
+    .user-desc {
       text-align: left;
-      width:100%;
+      width: 100%;
       display: block;
-      color:white;
-      margin-top:7px;
-      margin-left:10px;
+      color: white;
+      margin-top: 7px;
+      margin-left: 10px;
       position: relative;
     }
   }
