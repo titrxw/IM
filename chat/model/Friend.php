@@ -43,13 +43,8 @@ class Friend extends Model
         $response = $this->client->search($params);
         if (!empty($response['hits']) && $response['hits']['total'] > 0){
             foreach($response['hits']['hits'] as $item) {
-                $result[$item['_source']['union_id']] = [
-                    'union_id' => $item['_source']['union_id'],
-                    'name' => $item['_source']['name'],
-                    'headimgurl' => $item['_source']['headimgurl'],
-                    'mobile' => $item['_source']['mobile'],
-                    'is_friend' => false
-                ];
+                $item['_source']['is_friend'] = false;
+                $result[$item['_source']['union_id']] = $item['_source'];
             }
         }
 
