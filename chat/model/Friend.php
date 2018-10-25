@@ -8,12 +8,51 @@
 namespace chat\model;
 
 use framework\base\Model;
+use Elasticsearch\ClientBuilder;
 
 class Friend extends Model
 {
+    private $client;
+
+    protected function  afterInit()
+    {
+        $this->client = ClientBuilder::create()->build();
+    }
+
     public function list($uid)
     {
         return $this->db()->select('friends', ['[><]user' => ['f_id' => 'union_id']], ['name', 'mobile',  'headimgurl', 'friends.f_id(union_id)'], ['s_id' => $uid]);
+    }
+
+    public function findUser($uid, $keyword) 
+    {
+        $params = [
+            'index' => 'chat',
+            'type' => 'user',
+            'body' => [
+                'query' => [
+                    "multi_match" => [
+                        "query" => $keyword,
+                        "fields" => ["_all"]
+                    ]
+                ]
+            ]
+        ];
+
+        $result = [];
+        $response = $this->client->search($params);
+        if (!empty($response['hits']) && $response['hits']['total'] > 0){
+            foreach($response['hits']['hits'] as $item) {
+                $result[$item['_source']['union_id']] = [
+                    'union_id' => $item['_source']['union_id'],
+                    'name' => $item['_source']['name'],
+                    'headimgurl' => $item['_source']['headimgurl'],
+                    'is_friend' => false
+                ];
+            }
+        }
+
+        return $result;
     }
 
     public function findUserByMobile($uid, $mobile) 

@@ -20,6 +20,17 @@ class Friend extends User
     /**
      * @method get
      * 
+     * @rule keyword|get|参数错误 require
+     */
+    public function findUserApi()
+    {
+        $keyword = $this->request->get('keyword');
+        return [200, $this->_friendM->findUser($this->_uid, $keyword)];
+    }
+
+    /**
+     * @method get
+     * 
      * @rule mobile|get|账号格式错误 regex|/^1[34578]\d{9}$/  
      */
     public function findUserByMobileApi()
