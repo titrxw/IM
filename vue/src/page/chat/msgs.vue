@@ -19,7 +19,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions([getMsgList]),
+    ...mapActions(['getMsgList']),
     select(id) {
       this.$router.push('/chat/input?uid=' + id)
     }

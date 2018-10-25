@@ -2,7 +2,7 @@ export default {
     msg: '',
     netStatus: '',
     userAuthStatus: '',
-    userInfo: '',
+    userInfo: {},
     msgList: {},
     contacts: [],
     addPeoples: {},

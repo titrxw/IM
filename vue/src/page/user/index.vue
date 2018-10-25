@@ -31,7 +31,7 @@ export default {
   mounted: function() {
     let self = this;
     if (this.websocket._handle) {
-      self.getUserInfo(this.websocket);
+      this.getUserInfo(this.websocket);
     }
     this.websocket.setOnConnect(function(data, action) {
       self.getUserInfo(self.websocket);
