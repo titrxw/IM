@@ -35,9 +35,9 @@ export default class MyWebSocket {
 
   __onMessage(data, action) {
     if (action == 'CONVERSATION_LIST_SEND') {
-      store.commit('CONVERSATION_LIST_SEND', data)
+      store.commit(action, data)
     } else if (action == 'FRIEND_LIST_SEND') {
-      store.commit('FRIEND_LIST_SEND', data)
+      store.commit(action, data)
     } else if (action == 'FRIEND_ADDLOG_SEND') {
       if (data.add) {
         for (let index in data.add) {
@@ -55,27 +55,27 @@ export default class MyWebSocket {
       if (!data) {
         return false;
       }
-      store.commit('FRIEND_FINDUSER_SEND', data)
+      store.commit(action, data)
     } else if (action == "FRIEND_ADD_SEND") {
       store.commit("msg", "添加好友请求发送成功");
     } else if (action == "FRIEND_ADD_RECV") {
       // 收到添加好友请求
       data.is_friend = false;
-      store.commit('FRIEND_ADD_RECV', data)
+      store.commit(action, data)
     } else if (action == "FRIEND_SUREADD_SEND") {
       // data 为 uid
       // 更改 requestPeople 的status
-      store.commit('FRIEND_SUREADD_SEND', data)
+      store.commit(action, data)
       self.$store.commit("msg", "添加好友成功");
     } else if (action == "FRIEND_SUREADD_RECV") {
       // 收到添加好友请求
       // data.uid 为好友的id
       // 更改addPeoples的status
-      store.commit('FRIEND_SUREADD_RECV', data)
+      store.commit(action, data)
     } else if (action == 'MEMBER_INFO_SEND') {
-      store.commit('MEMBER_INFO_SEND', data)
+      store.commit(action, data)
     } else if (action == 'CONVERSATION_TEXT_SEND' || action == 'CONVERSATION_TEXT_RECV') {
-        store.commit('CUR_CONVERSATION', data)
+      store.commit('CUR_CONVERSATION', data)
     }
     this._onMessage && this._onMessage(data, action);
   }
