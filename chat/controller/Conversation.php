@@ -82,7 +82,7 @@ class Conversation extends User
             if ($msg) {
                 $msg['time'] = date('Y-m-d H:i:s', $msg['time']);
                 $msg['union_id'] = $value;
-                $msgs[] = $msg;
+                $msgs[$value] = $msg;
             }
         }
 
