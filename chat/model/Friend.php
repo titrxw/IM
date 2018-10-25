@@ -47,6 +47,7 @@ class Friend extends Model
                     'union_id' => $item['_source']['union_id'],
                     'name' => $item['_source']['name'],
                     'headimgurl' => $item['_source']['headimgurl'],
+                    'mobile' => $item['_source']['mobile'],
                     'is_friend' => false
                 ];
             }
