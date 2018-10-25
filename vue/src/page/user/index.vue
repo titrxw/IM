@@ -17,7 +17,7 @@
     </div>
 </template>
 <script>
-import { mapState } from "vuex";
+import { mapState,mapActions } from "vuex";
 export default {
   data() {
     return {};
@@ -26,21 +26,15 @@ export default {
     ...mapState(["userInfo"])
   },
   methods: {
-    getUserInfo() {
-      if (JSON.stringify(this.userInfo) == "{}") {
-        this.websocket.send({
-          action: "MEMBER_INFO"
-        });
-      }
-    }
+    ...mapActions(['getUserInfo'])
   },
   mounted: function() {
     let self = this;
     if (this.websocket._handle) {
-      self.getUserInfo();
+      self.getUserInfo(this.websocket);
     }
     this.websocket.setOnConnect(function(data, action) {
-      self.getUserInfo();
+      self.getUserInfo(self.websocket);
     });
     this.websocket.connect(this.sysConstant.WEBSOCKET_HOST);
   }

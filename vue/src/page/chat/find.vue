@@ -38,7 +38,7 @@
 <script>
 import Search from "@/components/search";
 import Validate from "@/libs/validate";
-import {mapState} from 'vuex'
+import {mapState, mapActions} from 'vuex'
 export default {
   data() {
     return {
@@ -56,6 +56,7 @@ export default {
     ])
   },
   methods: {
+    ...mapActions(['getAddLogs']),
     onCancel() {},
     onSubmit() {
       if (!this.searchValue) {
@@ -87,22 +88,15 @@ export default {
           uid: uid
         }
       });
-    },
-    getAddLogs () {
-      if (JSON.stringify(this.addPeoples) == '{}' || JSON.stringify(this.requestPeoples) == '{}') {
-        this.websocket.send({
-          'action': 'FRIEND_ADDLOG'
-        })
-      }
     }
   },
   mounted() {
     let self = this;
     if (this.websocket._handle) {
-      self.getAddLogs()
+      this.getAddLogs(this.websocket)
     }
     this.websocket.setOnConnect(function (data) {
-      self.getAddLogs()
+      self.getAddLogs(self.websocket)
     })
     this.websocket.connect(this.sysConstant.WEBSOCKET_HOST);
   }

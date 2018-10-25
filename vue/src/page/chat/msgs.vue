@@ -12,22 +12,16 @@
 </div>
 </template>
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 export default {
   data: function() {
     return {
     };
   },
   methods: {
+    ...mapActions([getMsgList]),
     select(id) {
       this.$router.push('/chat/input?uid=' + id)
-    },
-    getMsgList () {
-      if (JSON.stringify(this.msgList) == '{}') {
-        this.websocket.send({
-          'action': 'CONVERSATION_LIST'
-        })
-      }
     }
   },
   computed: {
@@ -37,12 +31,12 @@ export default {
   },
   mounted () {
     let self = this
-    this.websocket.setOnConnect(function (data) {
-      self.getMsgList()
-    })
     if (this.websocket._handle) {
-      self.getMsgList()
+      this.getMsgList(this.websocket)
     }
+    this.websocket.setOnConnect(function (data) {
+      self.getMsgList(self.websocket)
+    })
     this.websocket.connect(this.sysConstant.WEBSOCKET_HOST)
   }
 };

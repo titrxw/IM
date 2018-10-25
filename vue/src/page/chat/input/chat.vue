@@ -7,7 +7,7 @@
 <script>
 import chatItem from "./chat-item";
 import chatInput from "./chat-input";
-import { mapState } from 'vuex'
+import { mapState,mapActions } from 'vuex'
 export default {
   components: {
     chatItem,
@@ -26,6 +26,7 @@ export default {
     ])
   },
   methods: {
+    ...mapActions(['getUserInfo']),
     beforeSend(data) {
       if (!this.websocket._handle) {
         return false;
@@ -46,13 +47,6 @@ export default {
       })
     },
     resend(data) {},
-    getUserInfo() {
-      if (JSON.stringify(this.userInfo) == "{}") {
-        this.websocket.send({
-          action: "MEMBER_INFO"
-        });
-      }
-    },
     getConversations() {
       this.websocket.send({
         'action': 'CONVERSATION_HISTORY',
@@ -66,12 +60,12 @@ export default {
   mounted () {
     this.unionId = this.$route.query.uid
     if (this.websocket._handle) {
-      this.getUserInfo()
+      this.getUserInfo(this.websocket)
       this.getConversations()
     }
     let self = this;
     this.websocket.setOnConnect(function (data, action) {
-      self.getUserInfo()
+      self.getUserInfo(self.websocket)
       self.getConversations()
     })
     this.websocket.setOnMessage(function(data, action) {
