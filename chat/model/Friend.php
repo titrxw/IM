@@ -26,22 +26,27 @@ class Friend extends Model
 
     public function findUser($uid, $keyword) 
     {
-        $params = [
-            'index' => 'chat',
-            'type' => 'user',
-            'body' => [
-                'query' => [
-                    "multi_match" => [
-                        "query" => $keyword,
-                        "fields" => ["_all"]
+        try{
+            $params = [
+                'index' => 'chat',
+                'type' => 'user',
+                'body' => [
+                    'query' => [
+                        "multi_match" => [
+                            "query" => $keyword,
+                            "fields" => ["_all"]
+                        ]
                     ]
                 ]
-            ]
-        ];
+            ];
+            $response = $this->client->search($params);
+        } catch(\Throwable $e) {
+            $this->handleThrowable($e);
+            $response = [];
+        }
 
         $result = [];
         $fids = [];
-        $response = $this->client->search($params);
         if (!empty($response['hits']) && $response['hits']['total'] > 0){
             foreach($response['hits']['hits'] as $item) {
                 $fids[] = $item['_source']['union_id'];
