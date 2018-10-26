@@ -46,8 +46,6 @@ export default {
 
       let result = await api.login(this.form);
       if (result) {
-        alert(9)
-        console.log(result)
         let that = this
         this.websocket.setOnMessage(function (data, action) {
           if (action == 'COMMON_USERBINDFD_SEND') {
