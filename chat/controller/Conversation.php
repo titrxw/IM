@@ -23,10 +23,8 @@ class Conversation extends User
      * @rule uid|get|参数错误 require
      * @rule text|get|发送内容错误 require
      */
-    public function textApi()
+    public function textApi($uid, $text)
     {
-        $uid = $this->request->get('uid');
-        $text = $this->request->get('text');
         if ($uid == $this->_uid) {
             return [501, '发送失败'];
         }
@@ -95,10 +93,8 @@ class Conversation extends User
      * @rule uid|get|参数错误 require
      * @rule page|get|参数错误 require|integer
      */
-    public function historyApi()
+    public function historyApi($uid,$page)
     {
-        $uid = $this->request->get('uid');
-        $page = $this->request->get('page');
         if ($uid == $this->_uid) {
             return [200, []];
         }

@@ -71,9 +71,8 @@ class Common extends Web
      * 
      * @rule uid|get|参数错误 require 
      */
-    public function userBindFdApi()
+    public function userBindFdApi($uid)
     {
-        $uid = $this->request->get('uid');
         if (!$this->redis->has('u-'.$uid)) {
             return [501, '参数错误'];
         }

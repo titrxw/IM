@@ -51,8 +51,8 @@ export default {
         this.websocket.setOnMessage(function (data, action) {
           if (action == COMMON_USERBINDFD_SEND) {
             that.websocket.setOnMessage(null)
-              that.$router.push('/')
-              return true;
+            that.$router.push('/')
+            return true;
           }
         });
         this.websocket.connect(this.sysConstant.WEBSOCKET_HOST)

@@ -32,17 +32,14 @@ class Member extends User
      * @rule new_password|get|新密码错误 require
      * @rule sure_password|get|确认密码错误 require
      */
-    public function passwordApi()
+    public function passwordApi($password,$new_password,$sure_password)
     {
-        $password = $this->request->get('password');
-        $newPassword = $this->request->get('new_password');
-        $surePassword = $this->request->get('sure_password');
 
-        if ($newPassword !== $surePassword) {
+        if ($new_password !== $sure_password) {
             return [500, '确认密码错误'];
         }
 
-        $result = $this->_userM->password($password, $newPassword, $this->_uid);
+        $result = $this->_userM->password($password, $new_password, $this->_uid);
         if ($result) {
             return [200, true];
         }

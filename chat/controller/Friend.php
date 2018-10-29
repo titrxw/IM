@@ -22,9 +22,8 @@ class Friend extends User
      * 
      * @rule keyword|get|参数错误 require
      */
-    public function findUserApi()
+    public function findUserApi($keyword)
     {
-        $keyword = $this->request->get('keyword');
         return [200, $this->_friendM->findUser($this->_uid, $keyword)];
     }
 
@@ -48,9 +47,8 @@ class Friend extends User
      * 
      * @rule uid|get|参数错误 require 
      */
-    public function addApi()
+    public function addApi($uid)
     {
-        $uid = $this->request->get('uid');
         // 添加请求记录
 
         $result = $this->_friendM->add($this->_uid, $uid);
@@ -79,10 +77,8 @@ class Friend extends User
      * 
      * @rule uid|get|参数错误 require 
      */
-    public function sureAddApi()
+    public function sureAddApi($uid)
     {
-        $uid = $this->request->get('uid');
-
         $result = $this->_friendM->sureAdd($this->_uid, $uid);
         if ($result) {
             $fd = $this->getFdByUid($uid);
