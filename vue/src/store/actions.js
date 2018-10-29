@@ -1,3 +1,10 @@
+
+import {
+  MEMBER_INFO,
+  FRIEND_ADDLOG,
+  FRIEND_LIST,
+  CONVERSATION_LIST
+} from '../conf/constant'
 export default {
   getUserInfo ({
     commit,
@@ -5,7 +12,7 @@ export default {
   }, websocket)  {
     if (JSON.stringify(state.userInfo) == "{}") {
       websocket.send({
-        action: "MEMBER_INFO"
+        action: MEMBER_INFO
       });
     }
   },
@@ -15,7 +22,7 @@ export default {
   }, websocket) {
     if (JSON.stringify(state.addPeoples) == '{}' || JSON.stringify(state.requestPeoples) == '{}') {
       websocket.send({
-        action: "FRIEND_ADDLOG"
+        action: FRIEND_ADDLOG
       });
     }
   },
@@ -25,7 +32,7 @@ export default {
   }, websocket) {
     if (state.contacts.length == 0) {
       websocket.send({
-        action: "FRIEND_LIST"
+        action: FRIEND_LIST
       });
     }
   },
@@ -35,7 +42,7 @@ export default {
   }, websocket) {
     if (JSON.stringify(state.msgList) == '{}') {
       websocket.send({
-        action: "CONVERSATION_LIST"
+        action: CONVERSATION_LIST
       });
     }
   },

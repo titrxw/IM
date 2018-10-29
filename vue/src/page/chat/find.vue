@@ -39,6 +39,11 @@
 import Search from "@/components/search";
 import Validate from "@/libs/validate";
 import {mapState, mapActions} from 'vuex'
+import {
+  FRIEND_FINDUSER,
+  FRIEND_ADD,
+  FRIEND_SUREADD
+} from '../../conf/constant'
 export default {
   data() {
     return {
@@ -64,7 +69,7 @@ export default {
         return false;
       }
       this.websocket.send({
-        'action': 'FRIEND_FINDUSER',
+        'action': FRIEND_FINDUSER,
         data: {
           keyword: this.searchValue
         }
@@ -72,7 +77,7 @@ export default {
     },
     addFriend(uid) {
       this.websocket.send({
-        'action': 'FRIEND_ADD',
+        'action': FRIEND_ADD,
         data: {
           uid: uid
         }
@@ -83,7 +88,7 @@ export default {
     },
     sureAddFriend(uid) {
       this.websocket.send({
-        'action': 'FRIEND_SUREADD',
+        'action': FRIEND_SUREADD,
         data: {
           uid: uid
         }

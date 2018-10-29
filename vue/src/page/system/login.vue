@@ -19,6 +19,7 @@
 </template>
 <script>
 import api from "@/api/auth";
+import {COMMON_USERBINDFD_SEND} from '../../conf/constant'
 export default {
   data() {
     return {
@@ -48,7 +49,7 @@ export default {
       if (result) {
         let that = this
         this.websocket.setOnMessage(function (data, action) {
-          if (action == 'COMMON_USERBINDFD_SEND') {
+          if (action == COMMON_USERBINDFD_SEND) {
             that.websocket.setOnMessage(null)
               that.$router.push('/')
               return true;

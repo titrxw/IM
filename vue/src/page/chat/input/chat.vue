@@ -8,6 +8,13 @@
 import chatItem from "./chat-item";
 import chatInput from "./chat-input";
 import { mapState,mapActions } from 'vuex'
+import {
+  CONVERSATION_TEXT,
+  CONVERSATION_HISTORY,
+  CONVERSATION_TEXT_SEND,
+  CONVERSATION_TEXT_RECV,
+  CONVERSATION_HISTORY_SEND
+} from '../../conf/constant'
 export default {
   components: {
     chatItem,
@@ -39,7 +46,7 @@ export default {
       }
       this.chatItems.push(data);
       this.websocket.send({
-        'action': 'CONVERSATION_TEXT',
+        'action': CONVERSATION_TEXT,
         data: {
           uid: this.unionId,
           text: data.content
@@ -49,7 +56,7 @@ export default {
     resend(data) {},
     getConversations() {
       this.websocket.send({
-        'action': 'CONVERSATION_HISTORY',
+        'action': CONVERSATION_HISTORY,
         'data': {
           uid:this.unionId,
           page : 1
@@ -69,13 +76,13 @@ export default {
       self.getConversations()
     })
     this.websocket.setOnMessage(function(data, action) {
-      if (action == "CONVERSATION_TEXT_SEND") {
+      if (action == CONVERSATION_TEXT_SEND) {
         
-      } else if (action == "CONVERSATION_TEXT_RECV") {
+      } else if (action == CONVERSATION_TEXT_RECV) {
         data.isMy = false;
         data.sendStatus = "success";
         self.chatItems.push(data);
-      } else if (action == "CONVERSATION_HISTORY_SEND") {
+      } else if (action == CONVERSATION_HISTORY_SEND) {
         self.chatItems = [...self.chatItems, ...data]
       }
     });

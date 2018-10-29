@@ -1,4 +1,14 @@
 import Vue from 'vue'
+import {
+    CONVERSATION_LIST_SEND,
+    FRIEND_LIST_SEND,
+    FRIEND_FINDUSER_SEND,
+    FRIEND_ADD_RECV,
+    FRIEND_SUREADD_SEND,
+    FRIEND_SUREADD_RECV,
+    MEMBER_INFO_SEND,
+    CUR_CONVERSATION
+  } from '../conf/constant'
 const mutations = {
     updateStatus(state, val) {
         state.netStatus = val
@@ -6,20 +16,20 @@ const mutations = {
     msg(state, msg) {
         state.msg = msg
     },
-    MEMBER_INFO_SEND(state, data) {
+    [MEMBER_INFO_SEND](state, data) {
         state.userInfo = data
     },
-    CONVERSATION_LIST_SEND(state, data) {
+    [CONVERSATION_LIST_SEND](state, data) {
         if (JSON.stringify(data) == '[]') {
             data = {}
         }
         state.msgList = data
     },
-    CUR_CONVERSATION(state, data) {
+    [CUR_CONVERSATION](state, data) {
         Vue.set(state.msgList, data.union_id, data)
         console.log(state.msgList)
     },
-    FRIEND_LIST_SEND(state, data) {
+    [FRIEND_LIST_SEND](state, data) {
         state.contacts = data
     },
     addPeoples(state, data) {
@@ -28,13 +38,13 @@ const mutations = {
     requestPeoples(state, data) {
         state.requestPeoples = data
     },
-    FRIEND_FINDUSER_SEND(state, data) {
+    [FRIEND_FINDUSER_SEND](state, data) {
         Vue.set(state.addPeoples, data.union_id, data)
     },
-    FRIEND_ADD_RECV(state, data) {
+    [FRIEND_ADD_RECV](state, data) {
         Vue.set(state.requestPeoples, data.union_id, data)
     },
-    FRIEND_SUREADD_SEND(state, data) {
+    [FRIEND_SUREADD_SEND](state, data) {
         state.contacts.push(data)
 
         Vue.set(state.requestPeoples[data], 'is_friend', true)
@@ -42,7 +52,7 @@ const mutations = {
             Vue.set(state.addPeoples[data], 'is_friend', true)
         }
     },
-    FRIEND_SUREADD_RECV(state, data) {
+    [FRIEND_SUREADD_RECV](state, data) {
         state.contacts.push(data)
         Vue.set(state.addPeoples[data.union_id], 'is_friend', true)
         if (state.requestPeoples[data.union_id]) {
