@@ -14,7 +14,7 @@ import {
   CONVERSATION_TEXT_SEND,
   CONVERSATION_TEXT_RECV,
   CONVERSATION_HISTORY_SEND
-} from '../../conf/constant'
+} from '../../../conf/constant'
 export default {
   components: {
     chatItem,
