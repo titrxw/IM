@@ -97,10 +97,7 @@ export default {
   },
   mounted() {
     let self = this;
-    if (this.websocket._handle) {
-      this.getAddLogs(this.websocket)
-    }
-    this.websocket.setOnConnect(function (data) {
+    this.websocket.setOnConnect(function () {
       self.getAddLogs(self.websocket)
     })
     this.websocket.connect(this.sysConstant.WEBSOCKET_HOST);

@@ -66,10 +66,6 @@ export default {
   },
   mounted () {
     this.unionId = this.$route.query.uid
-    if (this.websocket._handle) {
-      this.getUserInfo(this.websocket)
-      this.getConversations()
-    }
     let self = this;
     this.websocket.setOnConnect(function (data, action) {
       self.getUserInfo(self.websocket)

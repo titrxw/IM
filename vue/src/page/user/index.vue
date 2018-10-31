@@ -30,10 +30,7 @@ export default {
   },
   mounted: function() {
     let self = this;
-    if (this.websocket._handle) {
-      this.getUserInfo(this.websocket);
-    }
-    this.websocket.setOnConnect(function(data, action) {
+    this.websocket.setOnConnect(function() {
       self.getUserInfo(self.websocket);
     });
     this.websocket.connect(this.sysConstant.WEBSOCKET_HOST);

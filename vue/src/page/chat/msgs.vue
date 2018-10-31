@@ -31,10 +31,7 @@ export default {
   },
   mounted () {
     let self = this
-    if (this.websocket._handle) {
-      this.getMsgList(this.websocket)
-    }
-    this.websocket.setOnConnect(function (data) {
+    this.websocket.setOnConnect(function () {
       self.getMsgList(self.websocket)
     })
     this.websocket.connect(this.sysConstant.WEBSOCKET_HOST)

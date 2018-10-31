@@ -95,8 +95,8 @@ export default class MyWebSocket {
     }
 
     connect(host) {
-        console.log(this._handle)
         if (this._handle) {
+            this._onConnect && this._onConnect();
             return true;
         }
         let that = this
@@ -108,7 +108,6 @@ export default class MyWebSocket {
             return false;
         }
         host = host + '?uid=' + user.getToken()
-        alert(host);
         this._handle = new WebSocket(host);
         //与WebSocket建立连接
         this._handle.onopen = function(event) {
@@ -118,7 +117,7 @@ export default class MyWebSocket {
                     'uid': user.getToken()
                 }
             });
-            that._onConnect && that._onConnect(event);
+            that._onConnect && that._onConnect();
         };
         //与WebSocket建立连接
         this._handle.onclose = function(event) {
