@@ -3,8 +3,8 @@
     <transition name="page-move">
       <router-view class="page-view"></router-view>
     </transition>
-    <yd-tabbar slot="tabbar" v-if="$route.meta.showTabBar" activeColor="#a565ff">
-      <yd-tabbar-item title="消息" link="/" :active="$route.path == '/msgs'">
+    <yd-tabbar style="height:50px;" slot="tabbar" v-if="$route.meta.showTabBar" activeColor="#393D49">
+      <yd-tabbar-item title="消息" link="/" :active="$route.path == '/'">
       </yd-tabbar-item>
       <yd-tabbar-item title="好友" link="/friends" :active="$route.path == '/friends'">
       </yd-tabbar-item>
