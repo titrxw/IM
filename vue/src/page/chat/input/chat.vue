@@ -82,7 +82,7 @@ export default {
         self.chatItems = [...self.chatItems, ...data]
       }
     });
-    this.websocket.connect(this.sysConstant.WEBSOCKET_HOST);
+    this.websocket.connect(this.G.WEBSOCKET_HOST);
   }
 };
 </script>

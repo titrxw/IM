@@ -59,7 +59,7 @@ export default {
         self.$router.go(-1)
       }
     });
-    this.websocket.connect(this.sysConstant.WEBSOCKET_HOST);
+    this.websocket.connect(this.G.WEBSOCKET_HOST);
   }
 };
 </script>

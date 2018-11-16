@@ -34,7 +34,7 @@ export default {
     this.websocket.setOnConnect(function () {
       self.getMsgList(self.websocket)
     })
-    // this.websocket.connect(this.sysConstant.WEBSOCKET_HOST)
+    this.websocket.connect(this.G.WEBSOCKET_HOST)
   }
 };
 </script>
