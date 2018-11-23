@@ -19,6 +19,7 @@
   </div>
 </template>
 <script>
+import {MEMBER_PASSWORD_SEND, MEMBER_PASSWORD} from '../../conf/constant'
 export default {
   data() {
     return {
@@ -47,7 +48,7 @@ export default {
         return false;
       }
       this.websocket.send({
-        'action': 'MEMBER_PASSWORD',
+        'action': MEMBER_PASSWORD,
         'data': this.form
       })
     }
@@ -55,7 +56,7 @@ export default {
   mounted: function () {
     let self = this;
     this.websocket.setOnMessage(function(data, action) {
-      if (action == 'MEMBER_PASSWORD_SEND') {
+      if (action == MEMBER_PASSWORD_SEND) {
         self.$router.go(-1)
       }
     });
