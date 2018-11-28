@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import App from './App'
-import './env'
 import './conf'
 import YDUI from 'vue-ydui'
 import store from './store'
@@ -9,13 +8,14 @@ import 'vue-ydui/dist/ydui.rem.css'
 import './assets/style/common.less'
 Vue.use(YDUI)
 
+require('./mock.js')
 
 
 /* eslint-disable no-new */
 new Vue({
-  el: '#app',
-  router,
-  store,
-  template: '<App/>',
-  components: { App }
+    el: '#app',
+    router,
+    store,
+    template: '<App/>',
+    components: { App }
 })

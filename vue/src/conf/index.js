@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import '../env'
 import devConf from './dev'
 import producationConf from './producation'
 import websocket from '../libs/websocket'
@@ -7,10 +8,14 @@ import websocket from '../libs/websocket'
 if (Vue.ENV_PRODUCATION) {
     Vue.prototype.imgHost = 'https://baidu.com/uploads/'
     Vue.prototype.uploadApiHost = 'https://baidu.com/upload/kc/system/upload'
+    Vue.prototype.ApiHost = 'https://api.com/chat/'
+    Vue.ApiHost = 'https://api.com/chat/'
     Vue.prototype.G = producationConf
 } else {
     Vue.prototype.imgHost = 'https://baidu.com/uploads/'
     Vue.prototype.uploadApiHost = 'https://baidu.com/upload/kc/system/upload'
+    Vue.prototype.ApiHost = 'https://api.com/chat/'
+    Vue.ApiHost = 'https://api.com/chat/'
     Vue.prototype.G = devConf
 }
 

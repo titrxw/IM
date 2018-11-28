@@ -28,21 +28,16 @@ module.exports = {
         autoOpenBrowser: true,
         assetsSubDirectory: 'static',
         assetsPublicPath: '/',
-        // proxyTable: {},
-        proxyTable: {
-            '/chat': { //使用"/api"来代替"http://f.apiplus.c" 
-                target: 'http://127.0.0.1:8081', //源地址 
-                changeOrigin: true, //改变源 
-                pathRewrite: {
-                    '^/chat': '/chat/' //路径重写 
-                }
-            }
-        },
-        // CSS Sourcemaps off by default because relative paths are "buggy"
-        // with this option, according to the CSS-Loader README
-        // (https://github.com/webpack/css-loader#sourcemaps)
-        // In our experience, they generally work as expected,
-        // just be aware of this issue when enabling this option.
+        proxyTable: {},
+        // proxyTable: {
+        //     '/chat': { //使用"/api"来代替"http://f.apiplus.c" 
+        //         target: 'http://127.0.0.1:8081', //源地址 
+        //         changeOrigin: true, //改变源 
+        //         pathRewrite: {
+        //             '^/chat': '/chat/' //路径重写 
+        //         }
+        //     }
+        // },
         cssSourceMap: false
     }
 }
