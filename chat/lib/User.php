@@ -25,11 +25,11 @@ abstract class User extends Web
             return [501, $result];
         }
 
-        $this->_uid = $uid;
         $this->_user = $this->getUser($uid);
         if (!$this->_user) {
             return [501, '请重新登陆'];
         }
+        $this->_uid = $uid;
         return true;
     }
 

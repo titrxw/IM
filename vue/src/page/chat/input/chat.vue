@@ -42,7 +42,7 @@ export default {
       data.isMy = true;
       data.sendStatus = "success";
       if (data.type == "image") {
-        data.content = "https://zh5j.cn/uploads/" + data.content;
+        data.content = "https://uploads.cn/uploads/" + data.content;
       }
       this.chatItems.push(data);
       this.websocket.send({

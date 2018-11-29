@@ -3,9 +3,7 @@
 </template>
 <script>
 export default {
-  mounted: function () {
-    this.$store.commit('updateStatus',true)
-  }
+  
 }
 </script>
 
