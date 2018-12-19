@@ -18,7 +18,7 @@
         :on-format-error="handleFormatError"
         :on-exceeded-size="handleMaxSize"
         :on-min-size="handleMinSize"
-        :data="uploadData"
+        :data="data"
         :accept="accept"
         :multiple="getMutiple()"
         :capture="capture"
@@ -124,14 +124,17 @@ export default {
     uniqueId: {
       type: [Number, String],
       default: 0
+    },
+    data: {
+      type: Object,
+      default: function () {
+        return {}
+      }
     }
   },
   data() {
     return {
       emit: false,
-      uploadData: {
-        token: sessionStorage.getItem("token")
-      },
       uploadList: [],
       uidList: [],
       itemWidth: 0,
